@@ -4,6 +4,10 @@
 
 desdracin adalah platform kurasi short drama yang merangkum beberapa sumber populer ke pengalaman browsing yang lebih rapi, cepat, dan berbeda secara visual.
 
+## Credit
+This project is based on SekaiDrama by M Yusril.
+Source: https://github.com/Sansekai/SekaiDrama
+
 ## Persyaratan Sistem
 Sebelum memulai, pastikan komputer Anda sudah terinstall:
 - [Node.js](https://nodejs.org/) (Versi 18 LTS atau 20 LTS disarankan)
