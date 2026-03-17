@@ -68,14 +68,28 @@ export function AffiliatePromoPopup() {
     handleOpenChange(false);
   };
 
+  const handlePromoKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleAffiliateClick();
+    }
+  };
+
   if (!shouldRender) {
     return null;
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="overflow-hidden border-white/10 bg-[radial-gradient(circle_at_top,hsl(14_93%_67%_/_0.16),transparent_32%),radial-gradient(circle_at_85%_18%,hsl(184_74%_62%_/_0.14),transparent_24%),linear-gradient(180deg,hsl(228_46%_8%)_0%,hsl(var(--background))_100%)] p-0 text-left shadow-2xl shadow-black/40 sm:max-w-[440px] sm:rounded-[28px]">
-        <div className="relative px-6 pb-6 pt-7 sm:px-7 sm:pb-7 sm:pt-8">
+      <DialogContent className="overflow-hidden border-white/10 bg-[radial-gradient(circle_at_top,hsl(14_93%_67%_/_0.16),transparent_32%),radial-gradient(circle_at_85%_18%,hsl(184_74%_62%_/_0.14),transparent_24%),linear-gradient(180deg,hsl(228_46%_8%)_0%,hsl(var(--background))_100%)] p-0 text-left shadow-2xl shadow-black/40 sm:max-w-[440px] sm:rounded-[28px] [&>button]:right-3 [&>button]:top-3 [&>button]:h-7 [&>button]:w-7 [&>button]:rounded-full [&>button]:border [&>button]:border-white/5 [&>button]:bg-black/10 [&>button]:p-0 [&>button]:text-white/35 [&>button]:opacity-40 [&>button]:ring-0 [&>button]:ring-offset-0 hover:[&>button]:opacity-65 hover:[&>button]:bg-black/20 hover:[&>button]:text-white/55 [&>button>svg]:h-3 [&>button>svg]:w-3">
+        <div
+          className="relative cursor-pointer px-6 pb-6 pt-7 transition-transform duration-300 hover:scale-[1.01] sm:px-7 sm:pb-7 sm:pt-8"
+          role="button"
+          tabIndex={0}
+          onClick={handleAffiliateClick}
+          onKeyDown={handlePromoKeyDown}
+          aria-label="Lihat penawaran partner sekarang"
+        >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/8 to-transparent" />
           <div className="relative">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/80">
@@ -104,16 +118,11 @@ export function AffiliatePromoPopup() {
             <DialogFooter className="mt-6 flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-0">
               <Button
                 type="button"
-                variant="ghost"
-                className="rounded-2xl border border-white/10 bg-white/5 text-foreground/80 hover:bg-white/10 hover:text-foreground"
-                onClick={() => handleOpenChange(false)}
-              >
-                Tutup
-              </Button>
-              <Button
-                type="button"
                 className="rounded-2xl bg-primary px-5 text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90"
-                onClick={handleAffiliateClick}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleAffiliateClick();
+                }}
               >
                 Lihat Sekarang
                 <ExternalLink className="h-4 w-4" />
