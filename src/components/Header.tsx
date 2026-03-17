@@ -99,10 +99,7 @@ export function Header() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="font-display text-2xl font-bold gradient-text">
-                desdracin
-              </span>
-              <span className="hidden text-[10px] uppercase tracking-[0.32em] text-muted-foreground sm:block">
-                scroll less, watch more
+                pusatdracin
               </span>
             </div>
           </Link>

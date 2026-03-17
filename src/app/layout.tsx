@@ -8,12 +8,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "desdracin - Nonton drama pendek enak dan simpel",
-  description: "desdracin ngumpulin drama pendek dari beberapa sumber biar lebih gampang dicari dan langsung ditonton.",
+  title: "pusatdracin - Nonton drama pendek enak dan simpel",
+  description: "pusatdracin ngumpulin drama pendek dari beberapa sumber biar lebih gampang dicari dan langsung ditonton.",
   icons: {
-    icon: "/desdracin-tab.svg",
-    shortcut: "/desdracin-tab.svg",
-    apple: "/desdracin-tab.svg",
+    icon: "/pusatdracin-tab.svg",
+    shortcut: "/pusatdracin-tab.svg",
+    apple: "/pusatdracin-tab.svg",
   },
 };
 
