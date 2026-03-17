@@ -1,6 +1,5 @@
 # desdracin
 
-
 ![Preview](public/preview.png)
 
 desdracin adalah platform kurasi short drama yang merangkum beberapa sumber populer ke pengalaman browsing yang lebih rapi, cepat, dan berbeda secara visual.
@@ -15,15 +14,15 @@ Sebelum memulai, pastikan komputer Anda sudah terinstall:
 Ikuti langkah-langkah berikut untuk menjalankan project ini di komputer Anda:
 
 ### 1. Clone Repository
-1.  Buka terminal (Command Prompt/PowerShell).
-2.  Clone repository ini ke komputer Anda:
-    ```bash
-    git clone <repository-url-anda>
-    ```
-3.  Masuk ke folder project:
-    ```bash
-    cd desdracin
-    ```
+1. Buka terminal (Command Prompt/PowerShell).
+2. Clone repository ini ke komputer Anda:
+   ```bash
+   git clone https://github.com/naonyeer/dracin.git
+   ```
+3. Masuk ke folder project:
+   ```bash
+   cd dracin
+   ```
 
 ### 2. Install Dependencies
 Install semua library yang dibutuhkan project ini:
@@ -58,19 +57,12 @@ Buka browser dan kunjungi [http://localhost:3000](http://localhost:3000).
 ```text
 src/
 ├── app/                    # Halaman & Routing (Next.js App Router)
-│   ├── (auth)/             # Route Group untuk fitur Login/Register
-│   ├── (main)/             # Route Group untuk konten utama (Home, Search)
-│   ├── api/                # API Routes untuk integrasi backend
-│   ├── drama/              # Halaman detail & Video player
-│   └── layout.tsx          # Root layout aplikasi
-├── components/             # Reusable UI Components
-│   ├── ui/                 # Base components (Shadcn UI)
-│   ├── player/             # Komponen khusus video player
-│   ├── cards/              # Komponen card drama/koleksi
-│   └── layouts/            # Navbar, Sidebar, Footer
-├── hooks/                  # Custom React Hooks (useAuth, usePlayer, dll)
-├── lib/                    # Helper functions & konfigurasi library (Prisma, Axios)
-├── services/               # Logic fetching data & business logic
-├── types/                  # TypeScript interfaces & types definitions
-└── styles/                 # Global CSS & Tailwind configuration
+├── api/                    # API routes untuk integrasi backend
+├── detail/                 # Halaman detail tiap platform
+├── watch/                  # Halaman player video
+├── components/             # Reusable UI components
+├── hooks/                  # Custom React hooks
+├── lib/                    # Helper functions dan utilitas
+├── types/                  # TypeScript types
+└── styles/                 # Global styles
 ```
