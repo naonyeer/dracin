@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-const SECRET_KEY = process.env.NEXT_PUBLIC_CRYPTO_SECRET || "desdracin-short-drama";
+const SECRET_KEY = process.env.NEXT_PUBLIC_CRYPTO_SECRET || "pusatdracin-short-drama";
 
 export function encryptData(data: any): string {
   // If data is an object/array, stringify it first
