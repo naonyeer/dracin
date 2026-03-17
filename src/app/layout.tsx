@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { AffiliatePromoPopup } from "@/components/AffiliatePromoPopup";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Suspense } from "react";
@@ -34,6 +35,7 @@ export default function RootLayout({
           <Suspense fallback={<div className="h-16" />}>
             <Header />
           </Suspense>
+          <AffiliatePromoPopup />
           {children}
           <Footer />
           <Toaster />
