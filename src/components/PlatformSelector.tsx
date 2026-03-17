@@ -24,12 +24,12 @@ export function PlatformSelector() {
   }, []);
 
   return (
-    <div className="w-full py-4 px-4">
+    <div className="w-full px-4 py-4">
       {/* Mobile: Dropdown */}
       <div className="block md:hidden" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-muted/50 hover:bg-muted/80 transition-colors"
+          className="flex w-full items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-white/5 px-4 py-3.5 transition-all duration-300 hover:bg-white/10"
         >
           <div className="flex items-center gap-3">
             <div className="relative w-6 h-6 rounded-md overflow-hidden">
@@ -41,16 +41,16 @@ export function PlatformSelector() {
                 sizes="24px"
               />
             </div>
-            <span className="font-medium text-foreground">
-              {currentPlatformInfo.name}
-            </span>
+              <span className="font-semibold text-foreground">
+                {currentPlatformInfo.name}
+              </span>
           </div>
           <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute left-4 right-4 mt-2 bg-card rounded-xl shadow-lg border border-border overflow-hidden z-50">
+          <div className="absolute left-4 right-4 z-50 mt-2 overflow-hidden rounded-[24px] border border-white/10 bg-card/95 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.9)] backdrop-blur-2xl">
             {platforms.map((platform) => (
               <button
                 key={platform.id}
@@ -58,12 +58,12 @@ export function PlatformSelector() {
                   setPlatform(platform.id);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
-                  currentPlatform === platform.id 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'hover:bg-muted/50'
-                }`}
-              >
+                  className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${
+                    currentPlatform === platform.id 
+                      ? 'bg-primary/12 text-primary' 
+                      : 'hover:bg-white/5'
+                  }`}
+                >
                 <div className="relative w-6 h-6 rounded-md overflow-hidden">
                   <Image
                     src={platform.logo}
@@ -84,7 +84,7 @@ export function PlatformSelector() {
       </div>
 
       {/* Desktop: Horizontal tabs */}
-      <div className="hidden md:flex items-center gap-3">
+      <div className="hidden items-center gap-3 md:flex md:flex-wrap">
         {platforms.map((platform) => (
           <PlatformButton
             key={platform.id}
@@ -109,12 +109,12 @@ function PlatformButton({ platform, isActive, onClick }: PlatformButtonProps) {
     <button
       onClick={onClick}
       className={`
-        relative flex items-center gap-2 px-4 py-2.5 rounded-full
+        relative flex items-center gap-2 rounded-full px-4 py-2.5
         transition-all duration-300 ease-out
         ${
           isActive
-            ? "bg-primary/20 ring-2 ring-primary shadow-lg shadow-primary/20"
-            : "bg-muted/50 hover:bg-muted/80"
+            ? "-translate-y-0.5 border border-primary/30 bg-white/10 shadow-lg shadow-primary/15 ring-1 ring-primary/40"
+            : "border border-white/10 bg-white/[0.04] hover:-translate-y-0.5 hover:bg-white/[0.08]"
         }
       `}
     >
@@ -129,14 +129,14 @@ function PlatformButton({ platform, isActive, onClick }: PlatformButtonProps) {
       </div>
       <span
         className={`
-          font-medium text-sm whitespace-nowrap
-          ${isActive ? "text-primary" : "text-muted-foreground"}
+          text-sm font-semibold whitespace-nowrap
+          ${isActive ? "text-foreground" : "text-muted-foreground"}
         `}
       >
         {platform.name}
       </span>
       {isActive && (
-        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary animate-pulse" />
+        <span className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary animate-pulse" />
       )}
     </button>
   );
