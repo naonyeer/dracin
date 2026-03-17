@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Sparkles, ExternalLink } from "lucide-react";
 import {
   Dialog,
@@ -18,18 +17,10 @@ const INITIAL_PROMO_DELAY_MS = 30 * 1000;
 const AFFILIATE_URL = "https://s.shopee.co.id/5VQg7O1GuO";
 
 export function AffiliatePromoPopup() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const shouldRender = useMemo(() => !pathname?.startsWith("/watch"), [pathname]);
-
   useEffect(() => {
-    if (!shouldRender) {
-      setOpen(false);
-      return;
-    }
-
     const schedulePopup = (delay: number) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -47,12 +38,12 @@ export function AffiliatePromoPopup() {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [shouldRender]);
+  }, []);
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
 
-    if (!nextOpen && shouldRender) {
+    if (!nextOpen) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -74,10 +65,6 @@ export function AffiliatePromoPopup() {
       handleAffiliateClick();
     }
   };
-
-  if (!shouldRender) {
-    return null;
-  }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
