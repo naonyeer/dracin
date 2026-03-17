@@ -1,8 +1,8 @@
-# desdracin
+# pusatdracin
 
 ![Preview](public/preview.png)
 
-desdracin adalah platform kurasi short drama yang merangkum beberapa sumber populer ke pengalaman browsing yang lebih rapi, cepat, dan berbeda secara visual.
+pusatdracin adalah platform kurasi short drama yang merangkum beberapa sumber populer ke pengalaman browsing yang lebih rapi, cepat, dan berbeda secara visual.
 
 ## Credit
 This project is based on SekaiDrama by M Yusril.
