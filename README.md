@@ -4,6 +4,8 @@
 
 pusatdracin adalah platform kurasi short drama yang merangkum beberapa sumber populer ke pengalaman browsing yang lebih rapi, cepat, dan berbeda secara visual.
 
+Catatan: brand aplikasi ini adalah `pusatdracin`, tetapi nama repository GitHub masih `dracin`, jadi URL clone dan nama folder hasil clone tetap mengikuti nama repository.
+
 ## Credit
 This project is based on SekaiDrama by M Yusril.
 Source: https://github.com/Sansekai/SekaiDrama
@@ -27,6 +29,7 @@ Ikuti langkah-langkah berikut untuk menjalankan project ini di komputer Anda:
    ```bash
    cd dracin
    ```
+   Nama folder lokal tetap `dracin` selama nama repository GitHub belum diubah.
 
 ### 2. Install Dependencies
 Install semua library yang dibutuhkan project ini:
