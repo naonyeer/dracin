@@ -89,20 +89,20 @@ export function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-strong">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/55 backdrop-blur-2xl">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-primary/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary shadow-lg shadow-primary/20 transition-transform duration-300 group-hover:scale-110">
               <Play className="w-5 h-5 text-white fill-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-display font-bold text-2xl gradient-text">
+              <span className="font-display text-2xl font-bold gradient-text">
                 desdracin
               </span>
-              <span className="hidden sm:block text-[10px] uppercase tracking-[0.32em] text-muted-foreground">
-                nonton santai
+              <span className="hidden text-[10px] uppercase tracking-[0.32em] text-muted-foreground sm:block">
+                scroll less, watch more
               </span>
             </div>
           </Link>
@@ -111,7 +111,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSearchOpen(true)}
-              className="p-2.5 rounded-xl hover:bg-muted/50 transition-colors"
+              className="rounded-2xl border border-white/10 bg-white/5 p-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 hover:text-primary"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
@@ -124,7 +124,7 @@ export function Header() {
       {searchOpen &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 bg-background z-[9999] overflow-hidden">
+          <div className="fixed inset-0 z-[9999] overflow-hidden bg-[radial-gradient(circle_at_top,hsl(14_93%_67%_/_0.12),transparent_20%),radial-gradient(circle_at_80%_20%,hsl(184_74%_62%_/_0.12),transparent_18%),linear-gradient(180deg,hsl(var(--background))_0%,hsl(228_46%_6%)_100%)]">
             <div className="container mx-auto px-4 py-6 h-[100dvh] flex flex-col">
               <div className="flex items-center gap-4 mb-6 flex-shrink-0">
                 <div className="flex-1 relative min-w-0">
@@ -140,7 +140,7 @@ export function Header() {
                 </div>
                 <button
                   onClick={handleSearchClose}
-                  className="p-3 rounded-xl hover:bg-muted/50 transition-colors flex-shrink-0"
+                  className="flex-shrink-0 rounded-2xl border border-white/10 bg-white/5 p-3 transition-all duration-300 hover:bg-white/10 hover:text-primary"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -149,7 +149,7 @@ export function Header() {
               {/* Platform indicator */}
               <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
                 <span>Mencari di:</span>
-                <span className="px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
+                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary font-medium">
                   {platformInfo.name}
                 </span>
               </div>
@@ -170,7 +170,7 @@ export function Header() {
                         key={drama.bookId}
                         href={`/detail/dramabox/${drama.bookId}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
@@ -211,7 +211,7 @@ export function Header() {
                         key={book.book_id}
                         href={`/detail/reelshort/${book.book_id}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
@@ -260,7 +260,7 @@ export function Header() {
                         key={drama.shortPlayId}
                         href={`/detail/netshort/${drama.shortPlayId}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
@@ -305,7 +305,7 @@ export function Header() {
                         key={`${drama.shortPlayId}-${index}`}
                         href={`/detail/shortmax/${drama.shortPlayId}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
@@ -340,7 +340,7 @@ export function Header() {
                         key={book.book_id}
                         href={`/detail/melolo/${book.book_id}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <div className="w-16 h-24 bg-muted rounded-xl flex-shrink-0 overflow-hidden">
@@ -388,7 +388,7 @@ export function Header() {
                         key={book.playlet_id}
                         href={`/detail/flickreels/${book.playlet_id}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
@@ -428,7 +428,7 @@ export function Header() {
                         key={book.key}
                         href={`/detail/freereels/${book.key}`}
                         onClick={handleSearchClose}
-                        className="flex gap-4 p-4 rounded-2xl bg-card hover:bg-muted transition-all text-left animate-fade-up overflow-hidden"
+                        className="animate-fade-up overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:-translate-y-0.5 hover:bg-white/[0.07]"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <img
