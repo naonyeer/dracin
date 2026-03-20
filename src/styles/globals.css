@@ -15,10 +15,10 @@
     --popover: 225 33% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 0 100% 27%;
+    --primary: 45 63% 52%;
     --primary-foreground: 224 43% 8%;
 
-    --secondary: 45 63% 52%;
+    --secondary: 45 100% 68%;
     --secondary-foreground: 224 43% 8%;
 
     --muted: 225 23% 18%;
@@ -32,15 +32,15 @@
 
     --border: 224 22% 24%;
     --input: 224 22% 24%;
-    --ring: 0 100% 27%;
+    --ring: 45 63% 52%;
 
     --radius: 1rem;
 
     /* Custom gradients */
-    --gradient-primary: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%);
+    --gradient-primary: linear-gradient(100deg, #7A5A1B 0%, #D4AF37 48%, #F4E7B0 100%);
     --gradient-card: linear-gradient(145deg, hsl(226 32% 16% / 0.96) 0%, hsl(224 43% 10% / 0.98) 100%);
     --gradient-glow: radial-gradient(ellipse at center, hsl(45 63% 52% / 0.28) 0%, transparent 72%);
-    --gradient-hero: radial-gradient(circle at 14% 18%, hsl(0 100% 27% / 0.16), transparent 24%), radial-gradient(circle at 86% 16%, hsl(45 63% 52% / 0.12), transparent 24%), linear-gradient(180deg, #0b0f1a 0%, #0a0d16 100%);
+    --gradient-hero: radial-gradient(circle at 18% 16%, hsl(45 63% 52% / 0.12), transparent 24%), radial-gradient(circle at 82% 14%, hsl(45 100% 68% / 0.08), transparent 22%), linear-gradient(180deg, #080b12 0%, #0b0f1a 100%);
     --gradient-surface: linear-gradient(180deg, hsl(226 28% 18% / 0.78) 0%, hsl(223 31% 12% / 0.92) 100%);
     --noise-overlay: radial-gradient(circle at top left, hsl(0 0% 100% / 0.05), transparent 32%), radial-gradient(circle at bottom right, hsl(45 63% 52% / 0.08), transparent 28%);
     
@@ -51,12 +51,12 @@
 
     --sidebar-background: 225 33% 11%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 0 100% 27%;
+    --sidebar-primary: 45 63% 52%;
     --sidebar-primary-foreground: 224 43% 8%;
     --sidebar-accent: 225 23% 18%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 224 22% 24%;
-    --sidebar-ring: 0 100% 27%;
+    --sidebar-ring: 45 63% 52%;
   }
 }
 

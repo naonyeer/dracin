@@ -94,7 +94,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="group leading-none">
-            <h1 className="font-display text-2xl font-semibold tracking-wide bg-[linear-gradient(90deg,#8B0000,#D4AF37)] bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(212,175,55,0.3)]">
+            <h1 className="text-[clamp(1.45rem,2vw,2rem)] font-semibold tracking-[0.06em] bg-[linear-gradient(100deg,#7A5A1B_0%,#D4AF37_48%,#F4E7B0_100%)] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]">
               pusatdracin
             </h1>
           </Link>
@@ -116,7 +116,7 @@ export function Header() {
       {searchOpen &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 z-[9999] overflow-hidden bg-[radial-gradient(circle_at_top,hsl(0_100%_27%_/_0.12),transparent_20%),radial-gradient(circle_at_80%_20%,hsl(45_63%_52%_/_0.12),transparent_18%),linear-gradient(180deg,#0B0F1A_0%,#0A0D16_100%)]">
+          <div className="fixed inset-0 z-[9999] overflow-hidden bg-[radial-gradient(circle_at_top,hsl(45_63%_52%_/_0.12),transparent_20%),radial-gradient(circle_at_80%_20%,hsl(45_100%_68%_/_0.09),transparent_18%),linear-gradient(180deg,#080B12_0%,#0B0F1A_100%)]">
             <div className="container mx-auto px-4 py-6 h-[100dvh] flex flex-col">
               <div className="flex items-center gap-4 mb-6 flex-shrink-0">
                 <div className="flex-1 relative min-w-0">
