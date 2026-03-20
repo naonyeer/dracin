@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,13 +6,13 @@
 
 @layer base {
   :root {
-    --background: 225 41% 7%;
+    --background: 225 44% 4%;
     --foreground: 0 0% 92%;
 
-    --card: 225 33% 12%;
+    --card: 225 32% 10%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 225 33% 11%;
+    --popover: 225 31% 9%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 45 63% 52%;
@@ -37,10 +37,10 @@
     --radius: 1rem;
 
     /* Custom gradients */
-    --gradient-primary: linear-gradient(100deg, #7A5A1B 0%, #D4AF37 48%, #F4E7B0 100%);
+    --gradient-primary: linear-gradient(100deg, #C9A227 0%, #F5E6A9 52%, #C9A227 100%);
     --gradient-card: linear-gradient(145deg, hsl(226 32% 16% / 0.96) 0%, hsl(224 43% 10% / 0.98) 100%);
     --gradient-glow: radial-gradient(ellipse at center, hsl(45 63% 52% / 0.28) 0%, transparent 72%);
-    --gradient-hero: radial-gradient(circle at 18% 16%, hsl(45 63% 52% / 0.12), transparent 24%), radial-gradient(circle at 82% 14%, hsl(45 100% 68% / 0.08), transparent 22%), linear-gradient(180deg, #080b12 0%, #0b0f1a 100%);
+    --gradient-hero: radial-gradient(circle at 18% 16%, hsl(45 63% 52% / 0.1), transparent 24%), radial-gradient(circle at 82% 14%, hsl(45 100% 68% / 0.08), transparent 22%), linear-gradient(180deg, #05070d 0%, #0b0f1a 100%);
     --gradient-surface: linear-gradient(180deg, hsl(226 28% 18% / 0.78) 0%, hsl(223 31% 12% / 0.92) 100%);
     --noise-overlay: radial-gradient(circle at top left, hsl(0 0% 100% / 0.05), transparent 32%), radial-gradient(circle at bottom right, hsl(45 63% 52% / 0.08), transparent 28%);
     

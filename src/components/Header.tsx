@@ -93,8 +93,8 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="group leading-none">
-            <h1 className="text-[clamp(1.45rem,2vw,2rem)] font-semibold tracking-[0.06em] bg-[linear-gradient(100deg,#7A5A1B_0%,#D4AF37_48%,#F4E7B0_100%)] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]">
+          <Link href="/" className="leading-none">
+            <h1 className="[font-family:'Bebas_Neue',_'Inter',_'Satoshi',_sans-serif] text-[clamp(1.9rem,2.8vw,2.6rem)] font-normal uppercase tracking-[0.14em] bg-[linear-gradient(100deg,#C9A227_0%,#F5E6A9_52%,#C9A227_100%)] bg-clip-text text-transparent [text-shadow:0_0_12px_rgba(201,162,39,0.28)] [transform:perspective(900px)_rotateX(9deg)]">
               PUSATDRACIN
             </h1>
           </Link>

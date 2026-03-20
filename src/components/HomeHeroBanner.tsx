@@ -4,6 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Info, Play, Sparkles } from "lucide-react";
 
+function normalizeHeroImage(src: string | undefined): string {
+  if (!src) return "";
+  if (src.toLowerCase().includes(".heic")) {
+    return `https://wsrv.nl/?url=${encodeURIComponent(src)}&output=jpg`;
+  }
+  return src;
+}
+
 interface SpotlightHeroProps {
   platformName: string;
   title: string;
@@ -27,17 +35,22 @@ export function SpotlightHero({
   watchHref,
   detailHref,
 }: SpotlightHeroProps) {
+  const heroBackdrop = normalizeHeroImage(backdrop || poster);
+  const heroPoster = normalizeHeroImage(poster || backdrop);
+
   return (
     <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#111625_0%,#0a0f1a_100%)] p-5 shadow-[0_28px_70px_-36px_rgba(0,0,0,0.92)] md:p-8 lg:p-10">
       <div className="pointer-events-none absolute inset-0">
-        <Image
-          src={backdrop || poster}
-          alt={title}
-          fill
-          className="object-cover opacity-28 blur-[2px]"
-          sizes="100vw"
-          unoptimized
-        />
+        {heroBackdrop ? (
+          <Image
+            src={heroBackdrop}
+            alt={title}
+            fill
+            className="object-cover opacity-28 blur-[2px]"
+            sizes="100vw"
+            unoptimized
+          />
+        ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(108deg,rgba(8,12,22,0.95)_12%,rgba(8,12,22,0.72)_52%,rgba(8,12,22,0.92)_100%)]" />
       </div>
 
@@ -91,14 +104,18 @@ export function SpotlightHero({
         <div className="relative mx-auto w-full max-w-[320px] lg:max-w-[360px]">
           <div className="absolute inset-0 rounded-[24px] bg-cyan-400/20 blur-3xl" />
           <div className="relative overflow-hidden rounded-[24px] border border-white/15 shadow-[0_26px_70px_-35px_rgba(0,0,0,0.92)]">
-            <Image
-              src={poster}
-              alt={title}
-              width={640}
-              height={960}
-              className="h-auto w-full object-cover"
-              unoptimized
-            />
+            {heroPoster ? (
+              <Image
+                src={heroPoster}
+                alt={title}
+                width={640}
+                height={960}
+                className="h-auto w-full object-cover"
+                unoptimized
+              />
+            ) : (
+              <div className="aspect-[2/3] w-full bg-white/10" />
+            )}
           </div>
         </div>
       </div>
