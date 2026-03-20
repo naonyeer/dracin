@@ -14,22 +14,23 @@ export function PlatformSelector() {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: Event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   return (
     <div className="w-full px-4 py-4">
       {/* Mobile: Dropdown */}
-      <div className="block md:hidden" ref={dropdownRef}>
+      <div className="relative z-[110] block md:hidden" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex w-full items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-white/5 px-4 py-3.5 transition-all duration-300 hover:bg-white/10"
+          className="flex w-full touch-manipulation items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-white/5 px-4 py-3.5 transition-all duration-300 hover:bg-white/10"
         >
           <div className="flex items-center gap-3">
             <div className="relative w-6 h-6 rounded-md overflow-hidden">
@@ -50,7 +51,7 @@ export function PlatformSelector() {
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute left-4 right-4 z-50 mt-2 overflow-hidden rounded-[24px] border border-white/10 bg-card/95 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.9)] backdrop-blur-2xl">
+          <div className="absolute inset-x-0 top-full z-[120] mt-2 max-h-[min(60vh,22rem)] overflow-y-auto overscroll-contain rounded-[24px] border border-white/10 bg-card/95 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.95)] backdrop-blur-2xl [scrollbar-width:thin] [WebkitOverflowScrolling:touch] touch-pan-y pointer-events-auto">
             {platforms.map((platform) => (
               <button
                 key={platform.id}
@@ -58,7 +59,7 @@ export function PlatformSelector() {
                   setPlatform(platform.id);
                   setIsOpen(false);
                 }}
-                  className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${
+                  className={`flex w-full touch-manipulation items-center gap-3 px-4 py-3 transition-colors ${
                     currentPlatform === platform.id 
                       ? 'bg-primary/12 text-primary' 
                       : 'hover:bg-white/5'

@@ -297,7 +297,7 @@ export default function HomeContent() {
           <section className="h-[320px] animate-pulse rounded-[28px] border border-white/10 bg-white/[0.04]" />
         )}
 
-        <section className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(17,22,35,0.78)_0%,rgba(9,13,24,0.88)_100%)] backdrop-blur-xl">
+        <section className="relative z-[90] rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(17,22,35,0.78)_0%,rgba(9,13,24,0.88)_100%)] backdrop-blur-xl">
           {/* KEEP THIS - source selector for switching platform */}
           <PlatformSelector />
         </section>
