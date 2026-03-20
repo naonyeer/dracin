@@ -30,7 +30,7 @@ export function NetShortHome() {
             <div className="h-7 w-48 bg-muted/50 rounded animate-pulse mb-4" />
             
             {/* Card Grid Skeleton */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+            <div className="media-grid">
               {Array.from({ length: 12 }).map((_, cardIndex) => (
                 <UnifiedMediaCardSkeleton key={cardIndex} index={cardIndex} />
               ))}
@@ -66,11 +66,11 @@ export function NetShortHome() {
       {forYouData?.data && forYouData.data.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold font-display text-foreground">
+            <h2 className="font-display text-2xl font-extrabold text-foreground md:text-3xl">
               Rekomendasi Untukmu
             </h2>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+          <div className="media-grid">
             {forYouData.data.map((drama, index) => (
               <UnifiedMediaCard 
                 key={drama.shortPlayId} 
@@ -79,6 +79,7 @@ export function NetShortHome() {
                 cover={drama.cover}
                 link={`/detail/netshort/${drama.shortPlayId}`}
                 episodes={drama.totalEpisodes}
+                views={drama.heatScore}
                 topLeftBadge={drama.scriptName ? {
                   text: drama.scriptName,
                   color: "#E52E2E"
@@ -98,13 +99,13 @@ export function NetShortHome() {
         <section key={group.groupId}>
           {/* Section Header - removed "Lihat Semua" link */}
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold font-display text-foreground">
+            <h2 className="font-display text-2xl font-extrabold text-foreground md:text-3xl">
               {stripEmoji(group.groupName)}
             </h2>
           </div>
 
           {/* Drama Grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+          <div className="media-grid">
             {group.dramas.slice(0, 12).map((drama, index) => (
               <UnifiedMediaCard 
                 key={drama.shortPlayId} 
@@ -113,6 +114,7 @@ export function NetShortHome() {
                 cover={drama.cover}
                 link={`/detail/netshort/${drama.shortPlayId}`}
                 episodes={drama.totalEpisodes}
+                views={drama.heatScore}
                 topLeftBadge={drama.scriptName ? {
                   text: drama.scriptName,
                   color: "#E52E2E"

@@ -63,9 +63,9 @@ export function InfiniteMeloloSection({ title }: InfiniteMeloloSectionProps) {
 
   if (isLoading || !data) {
     return (
-      <section className="space-y-4">
-        <div className="h-7 md:h-8 w-48 bg-white/10 rounded-lg animate-pulse mb-4" />
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <section className="space-y-5">
+        <div className="mb-4 h-8 w-56 rounded-lg bg-white/10 animate-pulse" />
+        <div className="media-grid">
           {Array.from({ length: 16 }).map((_, i) => (
             <UnifiedMediaCardSkeleton key={i} />
           ))}
@@ -75,12 +75,12 @@ export function InfiniteMeloloSection({ title }: InfiniteMeloloSectionProps) {
   }
 
   return (
-    <section>
-      <h2 className="font-display font-bold text-xl md:text-2xl text-foreground mb-4">
+    <section className="space-y-5">
+      <h2 className="mb-4 font-display text-2xl font-extrabold text-foreground md:text-3xl">
         {title}
       </h2>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="media-grid">
         {allBooks.map((book, index) => (
           <UnifiedMediaCard 
             key={`${book.book_id}-${index}`} 
@@ -88,6 +88,7 @@ export function InfiniteMeloloSection({ title }: InfiniteMeloloSectionProps) {
             title={book.book_name}
             cover={book.thumb_url}
             link={`/detail/melolo/${book.book_id}`}
+            views={book.popularity}
             episodes={book.serial_count || 0}
             topLeftBadge={null} // Melolo doesn't seemingly have top-left badges in the list
           />

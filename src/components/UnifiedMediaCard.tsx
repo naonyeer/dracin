@@ -15,6 +15,7 @@ export interface UnifiedMediaCardProps {
   cover: string;
   link: string;
   episodes?: number;
+  views?: string | number;
   topLeftBadge?: BadgeConfig | null;
   topRightBadge?: BadgeConfig | null;
   index?: number;
@@ -25,6 +26,7 @@ export function UnifiedMediaCard({
   cover,
   link,
   episodes = 0,
+  views,
   topLeftBadge,
   topRightBadge,
   index = 0,
@@ -48,19 +50,19 @@ export function UnifiedMediaCard({
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Visual Container */}
-      <div className="relative aspect-[2/3] overflow-hidden rounded-[24px] border border-white/10 bg-muted/20 shadow-[0_20px_40px_-22px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_28px_55px_-24px_rgba(0,0,0,0.95)]">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-[16px] border border-white/10 bg-muted/20 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.86)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_34px_66px_-28px_rgba(0,0,0,0.98)]">
         <img
           src={cover.includes(".heic") 
             ? `https://wsrv.nl/?url=${encodeURIComponent(cover)}&output=jpg` 
             : cover}
           alt={title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.08]"
           loading="lazy"
           referrerPolicy="no-referrer"
         />
 
         {/* Gradient Overlay */}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_20%,rgba(10,14,28,0.08)_58%,rgba(7,10,22,0.86)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_20%,rgba(10,14,28,0.12)_55%,rgba(7,10,22,0.94)_100%)]" />
         <div className="pointer-events-none absolute inset-x-3 top-3 h-16 rounded-full bg-white/10 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Badges Container - Flexbox to prevent overlap */}
@@ -100,12 +102,20 @@ export function UnifiedMediaCard({
         </div>
 
         {/* Episode Count */}
-        {episodes > 0 && (
-          <div className="pointer-events-none absolute bottom-2 left-2 flex items-center gap-1 rounded-full border border-white/10 bg-black/35 px-2 py-1 text-[9px] font-medium text-white backdrop-blur-sm md:text-xs">
-            <Play className="w-2.5 h-2.5 md:w-3 md:h-3 fill-white" />
-            <span>{episodes} Ep</span>
-          </div>
-        )}
+        <div className="pointer-events-none absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2 text-[10px] text-white md:text-xs">
+          {episodes > 0 ? (
+            <div className="flex items-center gap-1 rounded-full border border-white/15 bg-black/45 px-2 py-1 font-medium backdrop-blur-sm">
+              <Play className="h-2.5 w-2.5 fill-white md:h-3 md:w-3" />
+              <span>{episodes} Ep</span>
+            </div>
+          ) : <span />}
+
+          {views ? (
+            <div className="rounded-full border border-white/15 bg-black/45 px-2 py-1 font-medium backdrop-blur-sm">
+              {views}
+            </div>
+          ) : null}
+        </div>
 
         {/* Center Play Button */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -117,7 +127,7 @@ export function UnifiedMediaCard({
 
       {/* Title */}
       <div className="pb-1 pt-3 md:pt-3.5">
-        <h3 className="line-clamp-2 font-display text-xs font-semibold leading-snug text-foreground transition-colors group-hover:text-primary md:text-sm">
+        <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary md:text-base">
           {title}
         </h3>
       </div>

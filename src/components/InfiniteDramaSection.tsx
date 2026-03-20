@@ -63,9 +63,9 @@ export function InfiniteDramaSection({ title }: InfiniteDramaSectionProps) {
 
   if (isLoading || !data) {
     return (
-      <section className="space-y-4">
-        <div className="h-7 md:h-8 w-48 bg-white/10 rounded-lg animate-pulse mb-4" />
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <section className="space-y-5">
+        <div className="mb-4 h-8 w-56 rounded-lg bg-white/10 animate-pulse" />
+        <div className="media-grid">
           {Array.from({ length: 16 }).map((_, i) => (
             <UnifiedMediaCardSkeleton key={i} />
           ))}
@@ -75,12 +75,12 @@ export function InfiniteDramaSection({ title }: InfiniteDramaSectionProps) {
   }
 
   return (
-    <section>
-      <h2 className="font-display font-bold text-xl md:text-2xl text-foreground mb-4">
+    <section className="space-y-5">
+      <h2 className="mb-4 font-display text-2xl font-extrabold text-foreground md:text-3xl">
         {title}
       </h2>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="media-grid">
         {allDramas.map((drama, index) => {
            // Normalize badge color: If text is "Terpopuler", force RED to match ReelShort/NetShort
            const isPopular = drama.corner?.name?.toLowerCase().includes("populer");
@@ -94,6 +94,7 @@ export function InfiniteDramaSection({ title }: InfiniteDramaSectionProps) {
                cover={drama.coverWap || drama.cover || ""}
                link={`/detail/dramabox/${drama.bookId}`}
                episodes={drama.chapterCount}
+               views={drama.playCount}
                topLeftBadge={drama.corner ? {
                  text: drama.corner.name,
                  color: badgeColor

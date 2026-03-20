@@ -26,7 +26,7 @@ export function DramaGrid({ dramas, isLoading, title, subtitle }: DramaGridProps
       )}
 
       {/* UPDATED GRID TO MATCH REELSHORT/NETSHORT */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="media-grid">
         {isLoading
           ? Array.from({ length: 12 }).map((_, i) => (
               <DramaCardSkeleton key={i} index={i} />

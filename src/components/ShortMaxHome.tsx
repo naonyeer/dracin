@@ -15,12 +15,12 @@ export function ShortMaxHome() {
   } = useShortMaxRekomendasi();
 
   return (
-    <div className="space-y-10 animate-fade-in pb-12">
+    <div className="space-y-10 pb-12 animate-fade-in">
       {/* Rekomendasi Section */}
       <section>
         {errorRekomendasi || (!loadingRekomendasi && (!rekomendasiData?.data || rekomendasiData.data.length === 0)) ? (
           <>
-            <h2 className="font-display font-bold text-xl md:text-2xl text-foreground mb-4">
+            <h2 className="mb-4 font-display text-2xl font-extrabold text-foreground md:text-3xl">
               Rekomendasi
             </h2>
             <UnifiedErrorDisplay
@@ -34,7 +34,7 @@ export function ShortMaxHome() {
             {/* Title Skeleton */}
             <div className="h-7 md:h-8 w-48 bg-white/10 rounded-lg animate-pulse mb-4" />
             {/* Card Grid Skeleton */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+            <div className="media-grid">
               {Array.from({ length: 8 }).map((_, i) => (
                 <UnifiedMediaCardSkeleton key={i} index={i} />
               ))}
@@ -42,10 +42,10 @@ export function ShortMaxHome() {
           </>
         ) : (
           <>
-            <h2 className="font-display font-bold text-xl md:text-2xl text-foreground mb-4">
+            <h2 className="mb-4 font-display text-2xl font-extrabold text-foreground md:text-3xl">
               Rekomendasi
             </h2>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+            <div className="media-grid">
               {rekomendasiData!.data.map((drama, index) => (
                 <UnifiedMediaCard
                   key={`rekomendasi-${drama.shortPlayId}-${index}`}

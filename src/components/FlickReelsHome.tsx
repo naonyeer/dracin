@@ -15,7 +15,7 @@ function SectionLoader({ count = 6, titleWidth = "w-48" }: { count?: number, tit
       <div className={`h-7 md:h-8 ${titleWidth} bg-white/10 rounded-lg animate-pulse`} />
       
       {/* Grid Skeleton - Matches main grid exactly */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="media-grid">
         {Array.from({ length: count }).map((_, i) => (
           <UnifiedMediaCardSkeleton key={i} />
         ))}
@@ -62,12 +62,12 @@ export function FlickReelsHome() {
         hotRankData?.data?.map((section, sIdx) => (
           <section key={section.name || sIdx} className="space-y-4">
              <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-xl md:text-2xl text-foreground flex items-center gap-2">
-                {section.name}
-              </h2>
-            </div>
+                <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold text-foreground md:text-3xl">
+                 {section.name}
+               </h2>
+             </div>
             
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+            <div className="media-grid">
               {section.data?.filter(item => item.title && item.cover).map((item, idx) => (
                 <div key={`${item.playlet_id}-${idx}`} className="relative">
                    <UnifiedMediaCard
@@ -75,6 +75,7 @@ export function FlickReelsHome() {
                     cover={item.cover}
                     link={`/detail/flickreels/${item.playlet_id}`}
                     episodes={item.upload_num ? parseInt(item.upload_num) : 0}
+                    views={item.hot_num}
                     topRightBadge={item.hot_num ? { text: item.hot_num, isTransparent: true } : null}
                   />
                 </div>
@@ -92,13 +93,13 @@ export function FlickReelsHome() {
           <section key={idx} className="space-y-4">
              {section.title && (
                <div className="flex items-center justify-between">
-                <h2 className="font-display font-bold text-xl md:text-2xl text-foreground">
+                <h2 className="font-display text-2xl font-extrabold text-foreground md:text-3xl">
                   {section.title}
                 </h2>
               </div>
              )}
              
-             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+             <div className="media-grid">
                {section.list?.filter(item => item.title && item.cover).map((item, i) => (
                  <UnifiedMediaCard
                     key={`${item.playlet_id}-${i}`}
@@ -106,6 +107,7 @@ export function FlickReelsHome() {
                     cover={item.cover}
                     link={`/detail/flickreels/${item.playlet_id}`}
                     episodes={item.upload_num ? parseInt(item.upload_num) : 0}
+                    views={item.hot_num}
                     topRightBadge={null}
                   />
                ))}

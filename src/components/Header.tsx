@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { Search, X, Play } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useSearchDramas } from "@/hooks/useDramas";
 import { useReelShortSearch } from "@/hooks/useReelShort";
 import { useNetShortSearch } from "@/hooks/useNetShort";
@@ -93,15 +93,10 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary shadow-lg shadow-primary/20 transition-transform duration-300 group-hover:scale-110">
-              <Play className="w-5 h-5 text-white fill-white" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-2xl font-bold gradient-text">
-                pusatdracin
-              </span>
-            </div>
+          <Link href="/" className="group leading-none">
+            <h1 className="font-display text-2xl font-semibold tracking-wide bg-gradient-to-r from-[#8B0000] via-[#C9A227] to-[#FFD700] bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(255,215,0,0.3)]">
+              pusatdracin
+            </h1>
           </Link>
 
           {/* Search Button Only - No Nav Links */}

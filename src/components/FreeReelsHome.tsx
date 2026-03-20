@@ -27,7 +27,7 @@ function SectionLoader({ count = 6, titleWidth = "w-48" }: { count?: number, tit
       <div className={`h-7 md:h-8 ${titleWidth} bg-white/10 rounded-lg animate-pulse`} />
       
       {/* Grid Skeleton - Matches main grid exactly */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="media-grid">
         {Array.from({ length: count }).map((_, i) => (
           <UnifiedMediaCardSkeleton key={i} />
         ))}
@@ -92,12 +92,12 @@ export function FreeReelsHome() {
            return (
             <section key={`home-module-${mIdx}`} className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-display font-bold text-xl md:text-2xl text-foreground">
+                <h2 className="font-display text-2xl font-extrabold text-foreground md:text-3xl">
                   {title}
                 </h2>
               </div>
 
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+              <div className="media-grid">
                 {validItems.map((item, idx) => (
                   <UnifiedMediaCard
                     key={`${item.key}-home-${mIdx}-${idx}`}
@@ -105,6 +105,7 @@ export function FreeReelsHome() {
                     cover={item.cover}
                     link={`/detail/freereels/${item.key}`}
                     episodes={item.episode_count || 0}
+                    views={item.follow_count ? `${(item.follow_count / 1000).toFixed(1)}k` : undefined}
                     topRightBadge={item.follow_count ? { text: `${(item.follow_count / 1000).toFixed(1)}k`, isTransparent: true } : null}
                   />
                 ))}
@@ -121,7 +122,7 @@ export function FreeReelsHome() {
         animeData?.data?.items && animeData.data.items.length > 0 && (
           <section className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-xl md:text-2xl text-foreground">
+              <h2 className="font-display text-2xl font-extrabold text-foreground md:text-3xl">
                 Anime
               </h2>
             </div>
@@ -137,12 +138,12 @@ export function FreeReelsHome() {
                 return (
                   <div key={`anime-module-${mIdx}`} className="space-y-4">
                     {module.module_name && cleanTitle(module.module_name) !== "" && (
-                      <h3 className="font-display font-semibold text-lg text-foreground/90">
+                      <h3 className="font-display text-xl font-bold text-foreground/95">
                         {cleanTitle(module.module_name)}
                       </h3>
                     )}
 
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+                    <div className="media-grid">
                       {validItems.map((item, idx) => (
                         <UnifiedMediaCard
                           key={`${item.key}-anime-${mIdx}-${idx}`}
@@ -150,6 +151,7 @@ export function FreeReelsHome() {
                           cover={item.cover}
                           link={`/detail/freereels/${item.key}`}
                           episodes={item.episode_count || 0}
+                          views={item.follow_count ? `${(item.follow_count / 1000).toFixed(1)}k` : undefined}
                           topRightBadge={item.follow_count ? { text: `${(item.follow_count / 1000).toFixed(1)}k`, isTransparent: true } : null}
                         />
                       ))}

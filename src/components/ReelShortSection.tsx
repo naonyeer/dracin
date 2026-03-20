@@ -4,33 +4,28 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { Play, Flame } from "lucide-react";
 import { useReelShortHomepage } from "@/hooks/useReelShort";
-import { BannerCarousel } from "./BannerCarousel";
 import { UnifiedMediaCard } from "./UnifiedMediaCard";
 import { UnifiedErrorDisplay } from "./UnifiedErrorDisplay";
 import { InfiniteReelShortSection } from "./InfiniteReelShortSection";
-import type { ReelShortBook, ReelShortBanner } from "@/types/reelshort";
+import type { ReelShortBook } from "@/types/reelshort";
 
 export function ReelShortSection() {
   const { data, isLoading, error, refetch } = useReelShortHomepage();
 
   // Group content by sections
   const sections = useMemo(() => {
-    if (!data?.data?.lists) return { banners: [], bookGroups: [] };
+    if (!data?.data?.lists) return { bookGroups: [] };
 
     const tabs = data.data.tab_list || [];
     const popularTab = tabs.find((t) => t.tab_name === "POPULER") || tabs[0];
     
-    if (!popularTab) return { banners: [], bookGroups: [] };
+    if (!popularTab) return { bookGroups: [] };
 
     const tabLists = data.data.lists.filter((list) => list.tab_id === popularTab.tab_id);
     
-    const banners: ReelShortBanner[] = [];
     const bookGroups: { title: string; books: ReelShortBook[] }[] = [];
     
     tabLists.forEach((list, index) => {
-      if (list.banners && list.banners.length > 0) {
-        banners.push(...list.banners);
-      }
       if (list.books && list.books.length > 0) {
         const sectionNames = ["Populer", "Terbaru", "Trending", "Untuk Kamu"];
         const title = sectionNames[index] || `Section ${index + 1}`;
@@ -38,7 +33,7 @@ export function ReelShortSection() {
       }
     });
 
-    return { banners, bookGroups };
+    return { bookGroups };
   }, [data]);
 
   if (error) {
@@ -53,8 +48,7 @@ export function ReelShortSection() {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <div className="aspect-[21/9] rounded-2xl bg-muted/50 animate-pulse" />
+      <div className="space-y-10">
         {Array.from({ length: 3 }).map((_, i) => (
           <SectionSkeleton key={i} />
         ))}
@@ -62,21 +56,18 @@ export function ReelShortSection() {
     );
   }
 
-  const { banners, bookGroups } = sections;
+  const { bookGroups } = sections;
 
   return (
-    <div className="space-y-8">
-      {/* Banner Carousel */}
-      {banners.length > 0 && <BannerCarousel banners={banners} />}
-
+    <div className="space-y-10">
       {/* Book Sections - Grid Layout */}
       {bookGroups.map((group, index) => (
         <section key={index}>
-          <h2 className="font-display font-bold text-xl md:text-2xl text-foreground mb-4">
+          <h2 className="mb-4 font-display text-2xl font-extrabold text-foreground md:text-3xl">
             {group.title}
           </h2>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+          <div className="media-grid">
             {group.books
               .filter((book) => book.book_id && book.book_pic)
               .slice(0, 16)
@@ -113,8 +104,8 @@ export function ReelShortSection() {
 function SectionSkeleton() {
   return (
     <div>
-      <div className="h-6 w-32 bg-muted/50 rounded animate-pulse mb-4" />
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+      <div className="mb-4 h-7 w-40 animate-pulse rounded bg-muted/50" />
+      <div className="media-grid">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i}>
             <div className="aspect-[2/3] rounded-lg bg-muted/50 animate-pulse" />

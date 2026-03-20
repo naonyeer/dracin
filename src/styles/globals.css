@@ -40,7 +40,7 @@
     --gradient-primary: linear-gradient(135deg, hsl(14 93% 67%) 0%, hsl(43 96% 68%) 42%, hsl(184 74% 62%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(226 32% 16% / 0.96) 0%, hsl(224 43% 10% / 0.98) 100%);
     --gradient-glow: radial-gradient(ellipse at center, hsl(14 93% 67% / 0.26) 0%, transparent 72%);
-    --gradient-hero: radial-gradient(circle at 12% 18%, hsl(14 93% 67% / 0.22), transparent 24%), radial-gradient(circle at 82% 14%, hsl(184 74% 62% / 0.16), transparent 22%), radial-gradient(circle at 50% 100%, hsl(43 96% 68% / 0.08), transparent 30%), linear-gradient(180deg, hsl(226 45% 11%) 0%, hsl(224 40% 8%) 52%, hsl(228 46% 6%) 100%);
+    --gradient-hero: radial-gradient(circle at 12% 18%, hsl(14 93% 67% / 0.18), transparent 24%), radial-gradient(circle at 82% 14%, hsl(184 74% 62% / 0.12), transparent 22%), linear-gradient(180deg, #0b0f1a 0%, #0a0d16 100%);
     --gradient-surface: linear-gradient(180deg, hsl(226 28% 18% / 0.78) 0%, hsl(223 31% 12% / 0.92) 100%);
     --noise-overlay: radial-gradient(circle at top left, hsl(0 0% 100% / 0.06), transparent 32%), radial-gradient(circle at bottom right, hsl(184 74% 62% / 0.08), transparent 28%);
     
@@ -247,6 +247,10 @@
 
   .surface-label {
     @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground;
+  }
+
+  .media-grid {
+    @apply grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-5 lg:grid-cols-5 xl:grid-cols-6;
   }
 }
 

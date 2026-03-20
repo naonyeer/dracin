@@ -5,11 +5,11 @@ interface UnifiedMediaCardSkeletonProps {
 export function UnifiedMediaCardSkeleton({ index = 0 }: UnifiedMediaCardSkeletonProps) {
   return (
     <div
-      className="rounded-2xl overflow-hidden animate-fade-up w-full"
+      className="w-full overflow-hidden rounded-[16px] animate-fade-up"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Cover Skeleton */}
-      <div className="aspect-[2/3] bg-muted/50 relative overflow-hidden rounded-2xl">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-[16px] bg-muted/50">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-muted/30 to-transparent animate-shimmer" 
              style={{ backgroundSize: '200% 100%' }} />
       </div>
