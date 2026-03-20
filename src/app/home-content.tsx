@@ -1,5 +1,6 @@
 "use client";
 
+import { PlatformSelector } from "@/components/PlatformSelector";
 import { DramaSection } from "@/components/DramaSection";
 import { ReelShortSection } from "@/components/ReelShortSection";
 import { ShortMaxHome } from "@/components/ShortMaxHome";
@@ -22,6 +23,16 @@ export default function HomeContent() {
 
   return (
     <main className="min-h-screen pt-16">
+      <div className="sticky top-16 z-40 border-y border-white/10 bg-background/70 backdrop-blur-2xl">
+        <div className="container mx-auto">
+          <div className="px-4 pt-4">
+            <p className="surface-label">Pilih sumber</p>
+          </div>
+          {/* KEEP THIS - source selector for switching platform */}
+          <PlatformSelector />
+        </div>
+      </div>
+
       {/* DramaBox Content - Multiple Sections */}
       {isDramaBox && (
         <div className="container mx-auto space-y-8 px-4 py-5 md:py-6">
