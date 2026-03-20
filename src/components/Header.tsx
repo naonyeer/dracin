@@ -95,7 +95,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="group leading-none">
             <h1 className="text-[clamp(1.45rem,2vw,2rem)] font-semibold tracking-[0.06em] bg-[linear-gradient(100deg,#7A5A1B_0%,#D4AF37_48%,#F4E7B0_100%)] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]">
-              pusatdracin
+              PUSATDRACIN
             </h1>
           </Link>
 
