@@ -6,7 +6,6 @@ import { Footer } from "@/components/Footer";
 import { AffiliatePromoPopup } from "@/components/AffiliatePromoPopup";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "pusatdracin - Nonton drama pendek enak dan simpel",
@@ -32,9 +31,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <Providers>
-          <Suspense fallback={<div className="h-16" />}>
-            <Header />
-          </Suspense>
+          <Header />
           <AffiliatePromoPopup />
           {children}
           <Footer />
