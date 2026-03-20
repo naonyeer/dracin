@@ -63,29 +63,31 @@ export default function HomeContent() {
             <div className="absolute -left-10 top-0 h-28 w-28 rounded-full bg-primary/16 blur-3xl" />
             <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-secondary/16 blur-3xl" />
           </div>
-          <div className="relative flex flex-col gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-4">
+          <div className={`relative flex flex-col px-4 py-4 md:px-6 md:py-4 ${isDramaBox ? "gap-2" : "gap-3 md:flex-row md:items-center md:justify-between"}`}>
             <div className="min-w-0 flex-1">
               <h1 className="text-2xl font-bold leading-none text-foreground md:text-3xl">
                 {activeCopy.title}
               </h1>
             </div>
 
-            <div className="flex flex-wrap gap-2 md:max-w-[560px] md:justify-end">
-              <div className="ambient-panel flex min-w-[156px] items-center gap-2 px-3 py-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/14 text-primary">
-                  <Play className="h-4 w-4 fill-current" />
+            {!isDramaBox && (
+              <div className="flex flex-wrap gap-2 md:max-w-[560px] md:justify-end">
+                <div className="ambient-panel flex min-w-[156px] items-center gap-2 px-3 py-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/14 text-primary">
+                    <Play className="h-4 w-4 fill-current" />
+                  </div>
+                  <div>
+                    <p className="surface-label">Sumber aktif</p>
+                    <p className="mt-1 text-sm font-semibold text-foreground">{platformInfo.name}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="surface-label">Sumber aktif</p>
-                  <p className="mt-1 text-sm font-semibold text-foreground">{platformInfo.name}</p>
-                </div>
+                {activeCopy.stats.map((stat) => (
+                  <span key={stat} className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+                    {stat}
+                  </span>
+                ))}
               </div>
-              {activeCopy.stats.map((stat) => (
-                <span key={stat} className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-                  {stat}
-                </span>
-              ))}
-            </div>
+            )}
           </div>
         </div>
       </section>
