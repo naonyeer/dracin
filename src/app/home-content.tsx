@@ -181,25 +181,29 @@ export default function HomeContent() {
     );
 
     const meloloMerged = [...(meloloTrending?.books || []), ...(meloloLatest?.books || [])];
-    const meloloCandidates = toUnique(
+    const meloloSeedCandidates = toUnique(
       meloloMerged.map((movie) => {
         const bg = movie.backdrop || movie.poster || movie.thumb_url || "";
         const poster = movie.poster || movie.backdrop || movie.thumb_url || "";
 
         return {
-        id: `melolo-${movie.book_id}`,
-        title: movie.book_name,
-        description: normalizeDescription(movie.abstract, movie.serial_count),
-        backdrop: bg,
-        poster,
-        episodes: movie.serial_count,
-        viewsValue: parseViewCount(movie.popularity),
-        detailHref: `/detail/melolo/${movie.book_id}`,
-        watchHref: `/detail/melolo/${movie.book_id}`,
-        isFeatured: false,
-      };
+          id: `melolo-${movie.book_id}`,
+          title: movie.book_name,
+          description: normalizeDescription(movie.abstract, movie.serial_count),
+          backdrop: bg,
+          poster,
+          episodes: movie.serial_count,
+          viewsValue: parseViewCount(movie.popularity),
+          detailHref: `/detail/melolo/${movie.book_id}`,
+          watchHref: `/detail/melolo/${movie.book_id}`,
+          isFeatured: false,
+        };
       })
     );
+    const meloloCandidates = meloloSeedCandidates.map((movie, index) => ({
+      ...movie,
+      isFeatured: meloloSeedCandidates.length > 1 ? index === 1 : index === 0,
+    }));
 
     const flickMerged = [
       ...((flickHotRank?.data || []).flatMap((section) => section.data || [])),
