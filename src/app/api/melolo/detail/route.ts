@@ -1,22 +1,20 @@
-
-import { type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad } from "@/lib/cutad";
+import { normalizeMeloloDetail } from "@/lib/cutad-normalizers";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const bookId = searchParams.get("bookId");
+  const bookId = request.nextUrl.searchParams.get("bookId")?.trim();
 
   if (!bookId) {
-    return Response.json({ error: "Missing bookId" }, { status: 400 });
+    return NextResponse.json({ error: "bookId is required" }, { status: 400 });
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/detail?bookId=${bookId}`);
-    const data = await response.json();
-    return encryptedResponse(data);
+    const response = await fetchCutad<{ data?: any }>("melolo", "detail", { id: bookId });
+    return encryptedResponse(normalizeMeloloDetail(response.data));
   } catch (error) {
-    console.error("Error fetching Melolo detail:", error);
-    return Response.json({ error: "Failed to fetch data" }, { status: 500 });
+    console.error("Melolo detail error:", error);
+    return NextResponse.json({ error: "Failed to fetch Melolo detail" }, { status: 500 });
   }
 }

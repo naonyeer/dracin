@@ -1,22 +1,34 @@
-
-import { type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, proxyVideoUrl } from "@/lib/cutad";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const videoId = searchParams.get("videoId");
+  const videoId = request.nextUrl.searchParams.get("videoId")?.trim();
 
   if (!videoId) {
-    return Response.json({ error: "Missing videoId" }, { status: 400 });
+    return NextResponse.json({ error: "videoId is required" }, { status: 400 });
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/stream?videoId=${videoId}`);
-    const data = await response.json();
-    return encryptedResponse(data);
+    const response = await fetchCutad<{ data?: { videoUrl?: string; quality?: string | number } }>("melolo", "watch", { id: videoId });
+    const videoUrl = String(response.data?.videoUrl || "").trim();
+    const quality = String(response.data?.quality || "720p");
+    const proxiedUrl = videoUrl ? proxyVideoUrl(videoUrl) : "";
+
+    return encryptedResponse({
+      code: 0,
+      data: {
+        main_url: proxiedUrl,
+        video_model: JSON.stringify([
+          {
+            quality,
+            main_url: proxiedUrl,
+          },
+        ]),
+      },
+    });
   } catch (error) {
-    console.error("Error fetching Melolo stream:", error);
-    return Response.json({ error: "Failed to fetch data" }, { status: 500 });
+    console.error("Melolo stream error:", error);
+    return NextResponse.json({ error: "Failed to fetch Melolo stream" }, { status: 500 });
   }
 }

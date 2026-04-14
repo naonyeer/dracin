@@ -1,15 +1,22 @@
-
-import { type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, pickSectionItems, flattenSections } from "@/lib/cutad";
+import { normalizeMeloloBook } from "@/lib/cutad-normalizers";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/latest`);
-    const data = await response.json();
-    return encryptedResponse(data);
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("melolo", "rank", { page: 1 });
+    const sections = response.data?.sections || [];
+    const items = pickSectionItems(sections, 1).length > 0 ? pickSectionItems(sections, 1) : flattenSections(sections);
+
+    return encryptedResponse({
+      algo: "cutad",
+      books: items.map(normalizeMeloloBook),
+      has_more: false,
+      next_offset: 0,
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return encryptedResponse({ error: message }, 500);
+    console.error("Melolo latest error:", error);
+    return NextResponse.json({ error: "Failed to fetch Melolo latest" }, { status: 500 });
   }
 }
