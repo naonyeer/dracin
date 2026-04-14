@@ -6,6 +6,8 @@ import { ArrowUpRight, Download, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 const AFFILIATE_URL = "https://s.shopee.co.id/5VQg7O1GuO";
@@ -61,6 +63,10 @@ export function AffiliatePromoPopup() {
         onEscapeKeyDown={(event) => event.preventDefault()}
         onPointerDownOutside={(event) => event.preventDefault()}
       >
+        <DialogTitle className="sr-only">Promo aplikasi sponsor</DialogTitle>
+        <DialogDescription className="sr-only">
+          Iklan sponsor untuk mengunduh aplikasi gratis harian dengan tombol menuju tautan partner.
+        </DialogDescription>
         <div className="relative cursor-pointer p-5 sm:p-6" onClick={handlePopupClick}>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/10 to-transparent" />
 
