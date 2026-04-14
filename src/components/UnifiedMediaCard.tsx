@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Play } from "lucide-react";
+import { normalizeUiText } from "@/lib/display-text";
 
 export interface BadgeConfig {
   text: string;
@@ -31,7 +32,10 @@ export function UnifiedMediaCard({
   topRightBadge,
   index = 0,
 }: UnifiedMediaCardProps) {
-  
+  const normalizedTitle = normalizeUiText(title);
+  const normalizedTopLeftBadgeText = normalizeUiText(topLeftBadge?.text);
+  const normalizedTopRightBadgeText = normalizeUiText(topRightBadge?.text);
+
   // SHARED STYLES
   // Responsive: Mobile (Default) -> smaller | Desktop (md:) -> regular 10px
   // Using text-[8px] for mobile and text-[10px] for desktop
@@ -55,7 +59,7 @@ export function UnifiedMediaCard({
           src={cover.includes(".heic") 
             ? `https://wsrv.nl/?url=${encodeURIComponent(cover)}&output=jpg` 
             : cover}
-          alt={title}
+          alt={normalizedTitle}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.08]"
           loading="lazy"
           referrerPolicy="no-referrer"
@@ -79,7 +83,7 @@ export function UnifiedMediaCard({
                   color: topLeftBadge.textColor || "#FFFFFF"
                 }}
               >
-                {topLeftBadge.text}
+                {normalizedTopLeftBadgeText}
               </div>
             )}
           </div>
@@ -95,7 +99,7 @@ export function UnifiedMediaCard({
                   color: topRightBadge.textColor || "#FFFFFF"
                 }}
               >
-                {topRightBadge.text}
+                {normalizedTopRightBadgeText}
               </div>
             )}
           </div>
@@ -128,7 +132,7 @@ export function UnifiedMediaCard({
       {/* Title */}
       <div className="pb-1 pt-3 md:pt-3.5">
         <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary md:text-base">
-          {title}
+          {normalizedTitle}
         </h3>
       </div>
     </Link>

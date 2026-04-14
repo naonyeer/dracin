@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Info, Play, Sparkles } from "lucide-react";
 
+import { normalizeUiText } from "@/lib/display-text";
+
 function normalizeHeroImage(src: string | undefined): string {
   if (!src) return "";
   if (src.toLowerCase().includes(".heic")) {
@@ -37,6 +39,8 @@ export function SpotlightHero({
 }: SpotlightHeroProps) {
   const heroBackdrop = normalizeHeroImage(backdrop || poster);
   const heroPoster = normalizeHeroImage(poster || backdrop);
+  const normalizedTitle = normalizeUiText(title);
+  const normalizedDescription = normalizeUiText(description);
 
   return (
     <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#111625_0%,#0a0f1a_100%)] p-5 shadow-[0_28px_70px_-36px_rgba(0,0,0,0.92)] md:p-8 lg:p-10">
@@ -44,7 +48,7 @@ export function SpotlightHero({
         {heroBackdrop ? (
           <Image
             src={heroBackdrop}
-            alt={title}
+            alt={normalizedTitle}
             fill
             className="object-cover opacity-28 blur-[2px]"
             sizes="100vw"
@@ -63,10 +67,10 @@ export function SpotlightHero({
 
           <div className="space-y-3">
             <h1 className="font-display text-3xl font-extrabold leading-[1.02] text-white md:text-5xl">
-              {title}
+              {normalizedTitle}
             </h1>
             <p className="max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
-              {description}
+              {normalizedDescription}
             </p>
           </div>
 
@@ -107,7 +111,7 @@ export function SpotlightHero({
             {heroPoster ? (
               <Image
                 src={heroPoster}
-                alt={title}
+                alt={normalizedTitle}
                 width={640}
                 height={960}
                 className="h-auto w-full object-cover"
