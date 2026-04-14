@@ -206,7 +206,7 @@ export function Header() {
                           {book.abstract && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{normalizeUiText(book.abstract)}</p>}
                           {book.stat_infos?.length > 0 && (
                             <div className="mt-2 flex flex-wrap gap-1.5">
-                              <span className="tag-pill text-[10px]">{normalizeUiText(book.stat_infos[0])}</span>
+                              <span className="tag-pill text-[10px]">{normalizeUiText(book.stat_infos?.[0])}</span>
                             </div>
                           )}
                         </div>
