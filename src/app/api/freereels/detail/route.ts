@@ -1,31 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad } from "@/lib/cutad";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const id = searchParams.get("id");
+  const bookId = request.nextUrl.searchParams.get("id")?.trim();
 
-  if (!id) {
-    return NextResponse.json({ error: "ID parameter is required" }, { status: 400 });
+  if (!bookId) {
+    return NextResponse.json({ error: "id is required" }, { status: 400 });
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/detailAndAllEpisode?key=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetchCutad<{ data?: any }>("freereels", "detail", { id: bookId });
+    const detail = response.data;
+    const episodes = Array.isArray(detail?.episodes) ? detail.episodes : [];
+
+    return encryptedResponse({
+      data: {
+        info: {
+          id: String(bookId),
+          key: String(bookId),
+          name: String(detail?.title || ""),
+          title: String(detail?.title || ""),
+          cover: String(detail?.coverImgUrl || ""),
+          desc: String(detail?.introduce || ""),
+          episode_count: episodes.length,
+          follow_count: 0,
+          content_tags: [],
+          episode_list: episodes.map((episode: any, index: number) => ({
+            id: String(episode?.id || episode?.videoFakeId || `${bookId}-${index + 1}`),
+            name: String(episode?.title || `Episode ${index + 1}`),
+            cover: String(episode?.cover || episode?.thumbnail || detail?.coverImgUrl || ""),
+            video_fake_id: String(episode?.videoFakeId || episode?.id || ""),
+            episode_number: Number(episode?.episodeNumber || index + 1),
+            original_audio_language: "",
+            subtitle_list: [],
+            video_url: "",
+            m3u8_url: "",
+            external_audio_h264_m3u8: "",
+            external_audio_h265_m3u8: "",
+          })),
+        },
       },
-      next: { revalidate: 300 } // Cache detail for 5 minutes
     });
-
-    if (!res.ok) {
-      throw new Error(`Upstream API failed with status ${res.status}`);
-    }
-
-    const data = await safeJson(res);
-    return await encryptedResponse(data);
   } catch (error) {
-    console.error("Error fetching FreeReels detail:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error("FreeReels detail error:", error);
+    return NextResponse.json({ error: "Failed to fetch FreeReels detail" }, { status: 500 });
   }
 }

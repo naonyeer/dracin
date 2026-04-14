@@ -1,32 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, flattenSections } from "@/lib/cutad";
+import { normalizeFreeReelsItem } from "@/lib/cutad-normalizers";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get("query");
+  const query = request.nextUrl.searchParams.get("query")?.trim();
 
   if (!query) {
-    return NextResponse.json({ error: "Query parameter is required" }, { status: 400 });
+    return encryptedResponse({ code: 0, message: "success", data: { items: [] } });
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/search?query=${encodeURIComponent(query)}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Add any necessary headers here
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("freereels", "search", { query });
+    const items = flattenSections(response.data?.sections || []).map(normalizeFreeReelsItem);
+
+    return encryptedResponse({
+      code: 0,
+      message: "success",
+      data: {
+        items: items.map((item) => ({
+          id: item.key,
+          name: item.title,
+          cover: item.cover,
+          desc: item.desc,
+          episode_count: item.episode_count,
+          follow_count: item.follow_count,
+          content_tags: item.content_tags,
+        })),
       },
-      next: { revalidate: 0 } // Don't cache search results
     });
-
-    if (!res.ok) {
-      throw new Error(`Upstream API failed with status ${res.status}`);
-    }
-
-    const data = await res.json();
-    return await encryptedResponse(data);
   } catch (error) {
-    console.error("Error fetching FreeReels search:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error("FreeReels search error:", error);
+    return NextResponse.json({ error: "Failed to search FreeReels" }, { status: 500 });
   }
 }

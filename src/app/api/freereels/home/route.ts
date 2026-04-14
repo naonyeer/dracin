@@ -1,24 +1,22 @@
-
-import { encryptedResponse, safeJson } from "@/lib/api-utils";
 import { NextResponse } from "next/server";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, flattenSections } from "@/lib/cutad";
+import { normalizeFreeReelsItem, buildFreeReelsModules } from "@/lib/cutad-normalizers";
 
 export async function GET() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/homepage`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("freereels", "rank", { page: 1 });
+    const items = flattenSections(response.data?.sections || []).map(normalizeFreeReelsItem);
+
+    return encryptedResponse({
+      code: 0,
+      message: "success",
+      data: {
+        items: buildFreeReelsModules(items, "Pilihan FreeReels"),
       },
-      next: { revalidate: 3600 }
     });
-
-    if (!res.ok) {
-        return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
-    }
-
-    const data = await safeJson(res);
-    return encryptedResponse(data);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
+    console.error("FreeReels home error:", error);
+    return NextResponse.json({ error: "Failed to fetch FreeReels home" }, { status: 500 });
   }
 }
