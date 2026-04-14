@@ -1,42 +1,31 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
 import { NextRequest, NextResponse } from "next/server";
-
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad } from "@/lib/cutad";
 
 export async function GET(request: NextRequest) {
+  const bookId = request.nextUrl.searchParams.get("bookId")?.trim();
+
+  if (!bookId) {
+    return NextResponse.json({ error: "bookId is required" }, { status: 400 });
+  }
+
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const bookId = searchParams.get("bookId");
+    const response = await fetchCutad<{ data?: any }>("reelshort", "detail", { id: bookId });
+    const detail = response.data;
 
-    if (!bookId) {
-      return encryptedResponse(
-        { error: "bookId is required" },
-        400
-      );
-    }
-
-    const response = await fetch(
-      `${UPSTREAM_API}/detail?bookId=${encodeURIComponent(bookId)}`,
-      {
-        cache: 'no-store',
-      }
-    );
-
-    if (!response.ok) {
-      return encryptedResponse(
-        { error: "Failed to fetch detail" },
-        response.status
-      );
-    }
-
-    const data = await safeJson(response);
-    return encryptedResponse(data);
+    return encryptedResponse({
+      success: true,
+      bookId: String(detail?.id || bookId),
+      providerBookId: String(detail?.bookId || ""),
+      filteredTitle: String(detail?.filteredTitle || detail?.id || bookId),
+      title: String(detail?.title || ""),
+      cover: String(detail?.cover || ""),
+      description: String(detail?.description || ""),
+      totalEpisodes: Number(detail?.totalEpisodes || (Array.isArray(detail?.chapters) ? detail.chapters.length : 0)),
+      chapters: Array.isArray(detail?.chapters) ? detail.chapters : [],
+    });
   } catch (error) {
-    console.error("ReelShort Detail Error:", error);
-    return encryptedResponse(
-      { error: "Internal Server Error" },
-      500
-    );
+    console.error("ReelShort detail error:", error);
+    return NextResponse.json({ error: "Failed to fetch ReelShort detail" }, { status: 500 });
   }
 }
-

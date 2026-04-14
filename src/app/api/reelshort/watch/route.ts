@@ -1,43 +1,51 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
 import { NextRequest, NextResponse } from "next/server";
-
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad } from "@/lib/cutad";
 
 export async function GET(request: NextRequest) {
+  const bookId = request.nextUrl.searchParams.get("bookId")?.trim();
+  const episodeNumber = Number(request.nextUrl.searchParams.get("episodeNumber") || "1");
+
+  if (!bookId) {
+    return NextResponse.json({ error: "bookId is required" }, { status: 400 });
+  }
+
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const bookId = searchParams.get("bookId");
-    const episodeNumber = searchParams.get("episodeNumber");
+    const detailResponse = await fetchCutad<{ data?: any }>("reelshort", "detail", { id: bookId });
+    const detail = detailResponse.data;
+    const chapters = Array.isArray(detail?.chapters) ? detail.chapters : [];
+    const targetEpisode = chapters.find((chapter: any) => Number(chapter?.episode) === episodeNumber) || chapters[episodeNumber - 1];
 
-    if (!bookId || !episodeNumber) {
-      return encryptedResponse(
-        { error: "bookId and episodeNumber are required" },
-        400
-      );
+    if (!targetEpisode) {
+      return encryptedResponse({ success: false, isLocked: true, videoList: [] });
     }
 
-    const response = await fetch(
-      `${UPSTREAM_API}/episode?bookId=${encodeURIComponent(bookId)}&episodeNumber=${encodeURIComponent(episodeNumber)}`,
-      {
-        cache: 'no-store',
-      }
-    );
+    const watchResponse = await fetchCutad<{ data?: any }>("reelshort", "watch", {
+      bookId: detail?.bookId,
+      chapterId: targetEpisode?.chapter_id,
+      episode: targetEpisode?.episode || episodeNumber,
+      filteredTitle: detail?.filteredTitle || detail?.id || bookId,
+    });
 
-    if (!response.ok) {
-      return encryptedResponse(
-        { error: "Failed to fetch episode" },
-        response.status
-      );
-    }
+    const rawUrl = String(watchResponse.data?.url || watchResponse.data?.videoUrl || "").trim();
+    const quality = String(watchResponse.data?.quality || "auto");
 
-    const data = await safeJson(response);
-    return encryptedResponse(data);
+    return encryptedResponse({
+      success: Boolean(rawUrl),
+      isLocked: !rawUrl,
+      videoList: rawUrl
+        ? [
+            {
+              url: rawUrl,
+              encode: quality.toLowerCase().includes("h265") ? "H265" : "H264",
+              quality,
+              bitrate: 0,
+            },
+          ]
+        : [],
+    });
   } catch (error) {
-    console.error("ReelShort Episode Error:", error);
-    return encryptedResponse(
-      { error: "Internal Server Error" },
-      500
-    );
+    console.error("ReelShort watch error:", error);
+    return NextResponse.json({ error: "Failed to fetch ReelShort stream" }, { status: 500 });
   }
 }
-
