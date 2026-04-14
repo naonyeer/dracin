@@ -11,6 +11,7 @@ import { useFreeReelsSearch } from "@/hooks/useFreeReels";
 import { usePlatform } from "@/hooks/usePlatform";
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePathname } from "next/navigation";
+import { normalizeUiText } from "@/lib/display-text";
 
 export function Header() {
   const pathname = usePathname();
@@ -124,20 +125,20 @@ export function Header() {
                       >
                         <img
                           src={drama.cover}
-                          alt={drama.bookName}
+                          alt={normalizeUiText(drama.bookName)}
                           className="h-24 w-16 flex-shrink-0 rounded-xl object-cover"
                           loading="lazy"
                           referrerPolicy="no-referrer"
                         />
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate font-display font-semibold text-foreground">{drama.bookName}</h3>
-                          {drama.protagonist && <p className="mt-1 truncate text-sm text-muted-foreground">{drama.protagonist}</p>}
-                          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{drama.introduction}</p>
+                          <h3 className="truncate font-display font-semibold text-foreground">{normalizeUiText(drama.bookName)}</h3>
+                          {drama.protagonist && <p className="mt-1 truncate text-sm text-muted-foreground">{normalizeUiText(drama.protagonist)}</p>}
+                          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{normalizeUiText(drama.introduction)}</p>
                           {drama.tagNames && (
                             <div className="mt-2 flex flex-wrap gap-1.5">
                               {drama.tagNames.slice(0, 3).map((tag: string) => (
                                 <span key={tag} className="tag-pill text-[10px]">
-                                  {tag}
+                                  {normalizeUiText(tag)}
                                 </span>
                               ))}
                             </div>
@@ -160,19 +161,19 @@ export function Header() {
                       >
                         <img
                           src={book.book_pic}
-                          alt={book.book_title}
+                          alt={normalizeUiText(book.book_title)}
                           className="h-24 w-16 flex-shrink-0 rounded-xl object-cover"
                           loading="lazy"
                           referrerPolicy="no-referrer"
                         />
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate font-display font-semibold text-foreground">{book.book_title}</h3>
-                          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{book.special_desc}</p>
+                          <h3 className="truncate font-display font-semibold text-foreground">{normalizeUiText(book.book_title)}</h3>
+                          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{normalizeUiText(book.special_desc)}</p>
                           {book.theme && (
                             <div className="mt-2 flex flex-wrap gap-1.5">
                               {book.theme.slice(0, 3).map((tag: string, idx: number) => (
                                 <span key={idx} className="tag-pill text-[10px]">
-                                  {tag}
+                                  {normalizeUiText(tag)}
                                 </span>
                               ))}
                             </div>
@@ -195,17 +196,17 @@ export function Header() {
                       >
                         <img
                           src={book.thumb_url.includes(".heic") ? `https://wsrv.nl/?url=${encodeURIComponent(book.thumb_url)}&output=jpg` : book.thumb_url}
-                          alt={book.book_name}
+                          alt={normalizeUiText(book.book_name)}
                           className="h-24 w-16 flex-shrink-0 rounded-xl object-cover"
                           loading="lazy"
                           referrerPolicy="no-referrer"
                         />
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate font-display font-semibold text-foreground">{book.book_name}</h3>
-                          {book.abstract && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{book.abstract}</p>}
+                          <h3 className="truncate font-display font-semibold text-foreground">{normalizeUiText(book.book_name)}</h3>
+                          {book.abstract && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{normalizeUiText(book.abstract)}</p>}
                           {book.stat_infos?.length > 0 && (
                             <div className="mt-2 flex flex-wrap gap-1.5">
-                              <span className="tag-pill text-[10px]">{book.stat_infos[0]}</span>
+                              <span className="tag-pill text-[10px]">{normalizeUiText(book.stat_infos[0])}</span>
                             </div>
                           )}
                         </div>
@@ -226,19 +227,19 @@ export function Header() {
                       >
                         <img
                           src={book.cover}
-                          alt={book.title}
+                          alt={normalizeUiText(book.title)}
                           className="h-24 w-16 flex-shrink-0 rounded-xl object-cover"
                           loading="lazy"
                           referrerPolicy="no-referrer"
                         />
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate font-display font-semibold text-foreground">{book.title}</h3>
-                          {book.desc && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{book.desc}</p>}
+                          <h3 className="truncate font-display font-semibold text-foreground">{normalizeUiText(book.title)}</h3>
+                          {book.desc && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{normalizeUiText(book.desc)}</p>}
                           {book.content_tags?.length > 0 && (
                             <div className="mt-2 flex flex-wrap gap-1.5">
                               {book.content_tags.slice(0, 3).map((tag: string, idx: number) => (
                                 <span key={idx} className="tag-pill text-[10px]">
-                                  {tag}
+                                  {normalizeUiText(tag)}
                                 </span>
                               ))}
                             </div>
