@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Info, Play, Sparkles } from "lucide-react";
 
@@ -46,13 +45,12 @@ export function SpotlightHero({
     <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,#111625_0%,#0a0f1a_100%)] p-5 shadow-[0_28px_70px_-36px_rgba(0,0,0,0.92)] md:p-8 lg:p-10">
       <div className="pointer-events-none absolute inset-0">
         {heroBackdrop ? (
-          <Image
+          <img
             src={heroBackdrop}
             alt={normalizedTitle}
-            fill
-            className="object-cover opacity-28 blur-[2px]"
-            sizes="100vw"
-            unoptimized
+            className="h-full w-full object-cover opacity-28 blur-[2px]"
+            loading="eager"
+            referrerPolicy="no-referrer"
           />
         ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(108deg,rgba(8,12,22,0.95)_12%,rgba(8,12,22,0.72)_52%,rgba(8,12,22,0.92)_100%)]" />
@@ -109,13 +107,12 @@ export function SpotlightHero({
           <div className="absolute inset-0 rounded-[24px] bg-cyan-400/20 blur-3xl" />
           <div className="relative overflow-hidden rounded-[24px] border border-white/15 shadow-[0_26px_70px_-35px_rgba(0,0,0,0.92)]">
             {heroPoster ? (
-              <Image
+              <img
                 src={heroPoster}
                 alt={normalizedTitle}
-                width={640}
-                height={960}
                 className="h-auto w-full object-cover"
-                unoptimized
+                loading="eager"
+                referrerPolicy="no-referrer"
               />
             ) : (
               <div className="aspect-[2/3] w-full bg-white/10" />
