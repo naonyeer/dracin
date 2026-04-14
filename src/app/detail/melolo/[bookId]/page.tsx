@@ -7,6 +7,7 @@ import { Play, ChevronLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { normalizeUiText } from "@/lib/display-text";
 
 export default function MeloloDetailPage() {
   const params = useParams<{ bookId: string }>();
@@ -32,6 +33,8 @@ export default function MeloloDetailPage() {
 
   const drama = data.data.video_data;
   const firstEpisodeId = drama.video_list?.[0]?.vid;
+  const normalizedTitle = normalizeUiText(drama.series_title);
+  const normalizedDescription = normalizeUiText(drama.series_intro);
 
   return (
     <main className="min-h-screen pt-20">
@@ -65,7 +68,7 @@ export default function MeloloDetailPage() {
                 src={drama.series_cover.includes(".heic") 
                   ? `https://wsrv.nl/?url=${encodeURIComponent(drama.series_cover)}&output=jpg` 
                   : drama.series_cover}
-                alt={drama.series_title}
+                alt={normalizedTitle}
                 className="w-full max-w-[300px] mx-auto rounded-2xl shadow-2xl"
                 referrerPolicy="no-referrer"
               />
@@ -86,7 +89,7 @@ export default function MeloloDetailPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold font-display gradient-text mb-4">
-                  {drama.series_title}
+                  {normalizedTitle}
                 </h1>
                 
                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -101,7 +104,7 @@ export default function MeloloDetailPage() {
                <div className="glass rounded-xl p-4">
                 <h3 className="font-semibold text-foreground mb-2">Sinopsis</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {drama.series_intro}
+                  {normalizedDescription}
                 </p>
               </div>
 

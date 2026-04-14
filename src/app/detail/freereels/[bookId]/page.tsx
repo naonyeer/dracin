@@ -7,6 +7,7 @@ import { Play, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UnifiedErrorDisplay } from "@/components/UnifiedErrorDisplay";
+import { normalizeUiText } from "@/lib/display-text";
 
 export default function FreeReelsDetailPage() {
   const params = useParams();
@@ -33,6 +34,9 @@ export default function FreeReelsDetailPage() {
   }
 
   const drama = data.data;
+  const normalizedTitle = normalizeUiText(drama.title);
+  const normalizedDescription = normalizeUiText(drama.desc || "Tidak ada deskripsi.");
+  const normalizedTags = drama.content_tags?.map((tag: string) => normalizeUiText(tag));
   // Fallback for episode navigation. If detail API returns episodes list, use it. 
   // Otherwise try to use container info if available (likely from foryou feed passed via state, but here we fetch fresh).
   // For now assuming we start at episode 1 or what's available.
@@ -67,7 +71,7 @@ export default function FreeReelsDetailPage() {
             <div className="relative group">
               <img
                 src={drama.cover}
-                alt={drama.title}
+                alt={normalizedTitle}
                 className="w-full max-w-[300px] mx-auto rounded-2xl shadow-2xl"
               />
               {/* Overlay Play Button on Cover */}
@@ -86,7 +90,7 @@ export default function FreeReelsDetailPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold font-display gradient-text mb-4 text-white">
-                  {drama.title}
+                  {normalizedTitle}
                 </h1>
 
                 {/* Stats */}
@@ -100,7 +104,7 @@ export default function FreeReelsDetailPage() {
                 {/* Labels */}
                 {drama.content_tags && drama.content_tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-3">
-                    {drama.content_tags.map((tag: string, idx: number) => (
+                    {normalizedTags?.map((tag: string, idx: number) => (
                       <span key={idx} className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-white/80 text-xs font-medium">
                         {tag}
                       </span>
@@ -115,7 +119,7 @@ export default function FreeReelsDetailPage() {
                   Sinopsis
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {drama.desc || "Tidak ada deskripsi."}
+                  {normalizedDescription}
                 </p>
               </div>
 

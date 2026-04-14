@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import type { DramaDetailDirect, DramaDetailResponseLegacy } from "@/types/drama";
+import { normalizeUiText } from "@/lib/display-text";
 
 // Helper to check if response is new format
 function isDirectFormat(data: unknown): data is DramaDetailDirect {
@@ -76,6 +77,10 @@ export default function DramaBoxDetailPage() {
     );
   }
 
+  const normalizedBookName = normalizeUiText(book.bookName);
+  const normalizedIntroduction = normalizeUiText(book.introduction);
+  const normalizedTags = book.tags?.map((tag) => normalizeUiText(tag));
+
   return (
     <main className="min-h-screen pt-20">
       {/* Hero Section with Cover */}
@@ -105,7 +110,7 @@ export default function DramaBoxDetailPage() {
             <div className="relative group">
               <img
                 src={book.cover}
-                alt={book.bookName}
+                alt={normalizedBookName}
                 className="w-full max-w-[300px] mx-auto rounded-2xl shadow-2xl"
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
@@ -123,7 +128,7 @@ export default function DramaBoxDetailPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold font-display gradient-text mb-4">
-                  {book.bookName}
+                  {normalizedBookName}
                 </h1>
 
                 {/* Stats */}
@@ -144,7 +149,7 @@ export default function DramaBoxDetailPage() {
               {/* Tags */}
               {book.tags && book.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {book.tags.map((tag) => (
+                  {normalizedTags?.map((tag) => (
                     <span key={tag} className="tag-pill">
                       {tag}
                     </span>
@@ -156,7 +161,7 @@ export default function DramaBoxDetailPage() {
               <div className="glass rounded-xl p-4">
                 <h3 className="font-semibold text-foreground mb-2">Sinopsis</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {book.introduction}
+                  {normalizedIntroduction}
                 </p>
               </div>
 

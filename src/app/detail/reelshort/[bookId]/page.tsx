@@ -17,6 +17,7 @@ interface ReelShortDetailData {
 }
 
 import { decryptData } from "@/lib/crypto";
+import { normalizeUiText } from "@/lib/display-text";
 
 // ... existing code
 
@@ -60,6 +61,9 @@ export default function ReelShortDetailPage() {
     );
   }
 
+  const normalizedTitle = normalizeUiText(data.title);
+  const normalizedDescription = normalizeUiText(data.description || "Tidak ada deskripsi.");
+
   return (
     <main className="min-h-screen pt-20">
       {/* Hero Section with Cover */}
@@ -89,7 +93,7 @@ export default function ReelShortDetailPage() {
             <div className="relative group">
               <img
                 src={data.cover}
-                alt={data.title}
+                alt={normalizedTitle}
                 className="w-full max-w-[300px] mx-auto rounded-2xl shadow-2xl"
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
@@ -107,7 +111,7 @@ export default function ReelShortDetailPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold font-display gradient-text mb-4">
-                  {data.title}
+                  {normalizedTitle}
                 </h1>
 
                 {/* Stats */}
@@ -123,7 +127,7 @@ export default function ReelShortDetailPage() {
               <div className="glass rounded-xl p-4">
                 <h3 className="font-semibold text-foreground mb-2">Sinopsis</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {data.description || "Tidak ada deskripsi."}
+                  {normalizedDescription}
                 </p>
               </div>
 
