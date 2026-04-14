@@ -28,6 +28,7 @@ type HeroSpotlight = {
 };
 
 const HERO_VIEW_THRESHOLD = 100000;
+const REELSHORT_PREFERRED_SPOTLIGHT = "kutebas takdir dengan darah";
 
 function parseViewCount(value: string | number | undefined | null): number {
   if (typeof value === "number") return Number.isFinite(value) ? value : 0;
@@ -125,10 +126,15 @@ export default function HomeContent() {
       }))
     );
 
-    const reelShortCandidates = reelShortSeedCandidates.map((movie, index) => ({
-      ...movie,
-      isFeatured: reelShortSeedCandidates.length > 1 ? index === 1 : index === 0,
-    }));
+    const reelShortCandidates = reelShortSeedCandidates.map((movie, index) => {
+      const normalizedTitle = movie.title.toLowerCase();
+      const isPreferredSpotlight = normalizedTitle.includes(REELSHORT_PREFERRED_SPOTLIGHT);
+
+      return {
+        ...movie,
+        isFeatured: isPreferredSpotlight || (reelShortSeedCandidates.length > 1 ? index === 1 : index === 0),
+      };
+    });
 
     const meloloSeedCandidates = toUnique(
       [...(meloloTrending?.books || []), ...(meloloLatest?.books || [])].map((movie) => ({
