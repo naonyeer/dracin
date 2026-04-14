@@ -1,29 +1,28 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
 import { NextResponse } from "next/server";
-
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad } from "@/lib/cutad";
+import { normalizeReelShortBook } from "@/lib/cutad-normalizers";
 
 export async function GET() {
   try {
-    const response = await fetch(`${UPSTREAM_API}/homepage`, {
-      cache: 'no-store',
-    });
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("reelshort", "rank", { page: 1 });
+    const sections = Array.isArray(response.data?.sections) ? response.data?.sections : [];
+    const tabNames = ["POPULER", "TERBARU", "TRENDING", "UNTUK KAMU"];
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch data" },
-        { status: response.status }
-      );
-    }
+    const tab_list = sections.slice(0, 4).map((section, index) => ({
+      tab_id: String(index + 1),
+      tab_name: tabNames[index] || section?.name || `TAB ${index + 1}`,
+    }));
 
-    const data = await safeJson(response);
-    return encryptedResponse(data);
+    const lists = sections.slice(0, 4).map((section, index) => ({
+      tab_id: String(index + 1),
+      title: section?.name || tabNames[index] || `Section ${index + 1}`,
+      books: (Array.isArray(section?.items) ? section.items : []).map(normalizeReelShortBook),
+    }));
+
+    return encryptedResponse({ tab_list, lists });
   } catch (error) {
-    console.error("ReelShort API Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("ReelShort homepage error:", error);
+    return NextResponse.json({ error: "Failed to fetch ReelShort homepage" }, { status: 500 });
   }
 }
-
