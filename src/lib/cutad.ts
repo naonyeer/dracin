@@ -1,7 +1,13 @@
+import { NextResponse } from "next/server";
 import { safeJson } from "@/lib/api-utils";
 
 const CUTAD_BASE_URL = (process.env.CUTAD_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id").replace(/\/$/, "");
-const CUTAD_API_KEY = process.env.CUTAD_API_KEY || "";
+const CUTAD_API_KEY =
+  process.env.CUTAD_API_KEY ||
+  process.env.NEXT_PUBLIC_CUTAD_API_KEY ||
+  process.env.CUTAD_KEY ||
+  process.env.API_KEY ||
+  "";
 
 export type CutadSection<T> = {
   name?: string;
@@ -10,10 +16,25 @@ export type CutadSection<T> = {
 
 export function getCutadApiKey() {
   if (!CUTAD_API_KEY) {
-    throw new Error("Missing CUTAD_API_KEY environment variable");
+    throw new Error(
+      "Missing Cutad API key environment variable. Set CUTAD_API_KEY (preferred), NEXT_PUBLIC_CUTAD_API_KEY, CUTAD_KEY, or API_KEY."
+    );
   }
 
   return CUTAD_API_KEY;
+}
+
+export function createCutadErrorResponse(error: unknown, fallbackMessage: string) {
+  const message = error instanceof Error ? error.message : fallbackMessage;
+  const isConfigError = message.includes("Missing Cutad API key environment variable");
+
+  return NextResponse.json(
+    {
+      error: isConfigError ? "Cutad API key is not configured on the server" : fallbackMessage,
+      details: message,
+    },
+    { status: isConfigError ? 503 : 500 }
+  );
 }
 
 export function buildCutadUrl(
