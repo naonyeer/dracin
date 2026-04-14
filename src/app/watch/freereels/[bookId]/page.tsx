@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Loader2, List, AlertCircle } from "lucide-re
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Hls from "hls.js";
+import { normalizeUiText } from "@/lib/display-text";
 
 export default function FreeReelsWatchPage() {
   const params = useParams();
@@ -155,6 +156,8 @@ export default function FreeReelsWatchPage() {
     );
   }
 
+  const normalizedTitle = normalizeUiText(drama.title);
+
   return (
     <div className="fixed inset-0 flex flex-col bg-black">
       <div className="pointer-events-none absolute left-0 right-0 top-0 z-40 h-16">
@@ -169,7 +172,7 @@ export default function FreeReelsWatchPage() {
           </Link>
 
           <div className="min-w-0 flex-1 px-4 text-center">
-            <h1 className="truncate text-sm font-medium text-white drop-shadow-md sm:text-base">{drama.title}</h1>
+            <h1 className="truncate text-sm font-medium text-white drop-shadow-md sm:text-base">{normalizedTitle}</h1>
             <p className="text-xs text-white/80 drop-shadow-md">
               {currentEpisodeData ? `Episode ${(currentEpisodeData.index || currentEpisodeIndex) + 1}` : "Episode ?"}
             </p>

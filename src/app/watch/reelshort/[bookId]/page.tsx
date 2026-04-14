@@ -35,6 +35,7 @@ interface DetailData {
 }
 
 import { decryptData } from "@/lib/crypto";
+import { normalizeUiText } from "@/lib/display-text";
 
 // ... existing code
 
@@ -190,6 +191,7 @@ export default function ReelShortWatchPage() {
   };
 
   const totalEpisodes = detailData?.totalEpisodes || 1;
+  const normalizedTitle = normalizeUiText(detailData?.title || "Loading...");
 
   return (
     <main className="fixed inset-0 bg-black flex flex-col">
@@ -210,7 +212,7 @@ export default function ReelShortWatchPage() {
           
           <div className="text-center flex-1 px-4 min-w-0">
             <h1 className="text-white font-medium truncate text-sm sm:text-base drop-shadow-md">
-              {detailData?.title || "Loading..."}
+              {normalizedTitle}
             </h1>
             <p className="text-white/80 text-xs drop-shadow-md">Episode {currentEpisode}</p>
           </div>

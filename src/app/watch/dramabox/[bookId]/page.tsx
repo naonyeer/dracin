@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { DramaDetailDirect, DramaDetailResponseLegacy } from "@/types/drama";
+import { normalizeUiText } from "@/lib/display-text";
 
 // Helper to check if response is new format
 function isDirectFormat(data: unknown): data is DramaDetailDirect {
@@ -240,6 +241,9 @@ export default function DramaBoxWatchPage() {
     );
   }
 
+  const normalizedBookName = normalizeUiText(book.bookName);
+  const normalizedEpisodeName = normalizeUiText(currentEpisodeData?.chapterName || `Episode ${currentEpisode + 1}`);
+
   return (
     <main className="fixed inset-0 bg-black flex flex-col">
       {/* Header - Fixed Overlay with improved visibility */}
@@ -259,10 +263,10 @@ export default function DramaBoxWatchPage() {
           
           <div className="text-center flex-1 px-4 min-w-0">
             <h1 className="text-white font-medium truncate text-sm sm:text-base drop-shadow-md">
-              {book.bookName}
+              {normalizedBookName}
             </h1>
             <p className="text-white/80 text-xs drop-shadow-md">
-              {currentEpisodeData?.chapterName || `Episode ${currentEpisode + 1}`}
+              {normalizedEpisodeName}
             </p>
           </div>
 

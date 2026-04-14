@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { normalizeUiText } from "@/lib/display-text";
 
 interface VideoQuality {
   name: string;
@@ -111,6 +112,7 @@ export default function MeloloWatchPage() {
   // Find current episode index
   const currentEpisodeIndex = drama?.video_list?.findIndex(v => v.vid === currentVideoId) ?? -1;
   const totalEpisodes = drama?.video_list?.length || 0;
+  const normalizedTitle = normalizeUiText(drama?.series_title || "Loading...");
 
   const handleEpisodeChange = (index: number) => {
     if (!drama?.video_list?.[index]) return;
@@ -161,7 +163,7 @@ export default function MeloloWatchPage() {
 
           <div className="text-center flex-1 px-4 min-w-0">
             <h1 className="text-white font-medium truncate text-sm sm:text-base drop-shadow-md">
-              {drama?.series_title || "Loading..."}
+              {normalizedTitle}
             </h1>
             <p className="text-white/80 text-xs drop-shadow-md">
               Episode {currentEpisodeIndex !== -1 ? currentEpisodeIndex + 1 : "..."}
