@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
-import { fetchCutad } from "@/lib/cutad";
+import { fetchCutad, createCutadErrorResponse } from "@/lib/cutad";
 import { normalizeReelShortBook } from "@/lib/cutad-normalizers";
 
 export async function GET() {
@@ -23,6 +22,6 @@ export async function GET() {
     return encryptedResponse({ tab_list, lists });
   } catch (error) {
     console.error("ReelShort homepage error:", error);
-    return NextResponse.json({ error: "Failed to fetch ReelShort homepage" }, { status: 500 });
+    return createCutadErrorResponse(error, "Failed to fetch ReelShort homepage");
   }
 }

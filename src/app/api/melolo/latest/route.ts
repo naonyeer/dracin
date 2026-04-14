@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
-import { fetchCutad, pickSectionItems, flattenSections } from "@/lib/cutad";
+import { fetchCutad, pickSectionItems, flattenSections, createCutadErrorResponse } from "@/lib/cutad";
 import { normalizeMeloloBook } from "@/lib/cutad-normalizers";
 
 export async function GET() {
@@ -17,6 +16,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Melolo latest error:", error);
-    return NextResponse.json({ error: "Failed to fetch Melolo latest" }, { status: 500 });
+    return createCutadErrorResponse(error, "Failed to fetch Melolo latest");
   }
 }

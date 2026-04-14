@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
-import { fetchCutad, pickSectionItems, flattenSections } from "@/lib/cutad";
+import { fetchCutad, pickSectionItems, flattenSections, createCutadErrorResponse } from "@/lib/cutad";
 import { normalizeDramaBoxDrama } from "@/lib/cutad-normalizers";
 
 export async function GET() {
@@ -11,6 +10,6 @@ export async function GET() {
     return encryptedResponse(items.map(normalizeDramaBoxDrama).filter((item) => item.bookId));
   } catch (error) {
     console.error("DramaBox trending error:", error);
-    return NextResponse.json({ error: "Failed to fetch trending dramas" }, { status: 500 });
+    return createCutadErrorResponse(error, "Failed to fetch trending dramas");
   }
 }
