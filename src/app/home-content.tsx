@@ -110,7 +110,7 @@ export default function HomeContent() {
     );
 
     const reelShortBooks = reelShortHome?.data?.lists?.flatMap((list) => list.books || []) || [];
-    const reelShortCandidates = toUnique(
+    const reelShortSeedCandidates = toUnique(
       reelShortBooks.map((movie) => ({
         id: `reelshort-${movie.book_id}`,
         title: movie.book_title,
@@ -124,6 +124,11 @@ export default function HomeContent() {
         isFeatured: movie.book_mark?.text?.toLowerCase().includes("featured") || false,
       }))
     );
+
+    const reelShortCandidates = reelShortSeedCandidates.map((movie, index) => ({
+      ...movie,
+      isFeatured: reelShortSeedCandidates.length > 1 ? index === 1 : index === 0,
+    }));
 
     const meloloSeedCandidates = toUnique(
       [...(meloloTrending?.books || []), ...(meloloLatest?.books || [])].map((movie) => ({
