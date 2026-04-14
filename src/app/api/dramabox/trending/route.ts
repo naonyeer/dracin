@@ -1,34 +1,16 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
 import { NextResponse } from "next/server";
-
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/dramabox";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, pickSectionItems, flattenSections } from "@/lib/cutad";
+import { normalizeDramaBoxDrama } from "@/lib/cutad-normalizers";
 
 export async function GET() {
   try {
-    const response = await fetch(`${UPSTREAM_API}/trending`, {
-      cache: 'no-store',});
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch data" },
-        { status: response.status }
-      );
-    }
-
-    const data = await safeJson(response);
-    
-    // Filter out items without bookId or bookName to prevent blank cards
-    const filteredData = Array.isArray(data) 
-      ? data.filter((item: any) => item && item.bookId) 
-      : [];
-
-    return encryptedResponse(filteredData);
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("dramabox", "rank", { page: 1 });
+    const sections = response.data?.sections || [];
+    const items = pickSectionItems(sections, 0).length > 0 ? pickSectionItems(sections, 0) : flattenSections(sections);
+    return encryptedResponse(items.map(normalizeDramaBoxDrama).filter((item) => item.bookId));
   } catch (error) {
-    console.error("API Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("DramaBox trending error:", error);
+    return NextResponse.json({ error: "Failed to fetch trending dramas" }, { status: 500 });
   }
 }
-

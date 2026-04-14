@@ -1,43 +1,34 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
 import { NextRequest, NextResponse } from "next/server";
-
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/dramabox";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, flattenSections } from "@/lib/cutad";
+import { normalizeDramaBoxSearch, normalizeDramaBoxDrama } from "@/lib/cutad-normalizers";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get("query");
+  const query = request.nextUrl.searchParams.get("query")?.trim();
 
   if (!query) {
     return encryptedResponse([]);
   }
 
   try {
-    const response = await fetch(
-      `${UPSTREAM_API}/search?query=${encodeURIComponent(query)}`,
-      { cache: 'no-store',}
-    );
+    const response = await fetchCutad<{ data?: { records?: any[] } }>("dramabox", "search", { query });
+    const directResults = Array.isArray(response.data?.records)
+      ? response.data.records.map(normalizeDramaBoxSearch).filter((item) => item.bookId)
+      : [];
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch data" },
-        { status: response.status }
-      );
+    if (directResults.length > 0) {
+      return encryptedResponse(directResults);
     }
 
-    const data = await safeJson(response);
+    const rankResponse = await fetchCutad<{ data?: { sections?: any[] } }>("dramabox", "rank", { page: 1 });
+    const fallbackResults = flattenSections(rankResponse.data?.sections || [])
+      .map(normalizeDramaBoxDrama)
+      .filter((item) => item.bookName.toLowerCase().includes(query.toLowerCase()))
+      .map(normalizeDramaBoxSearch);
 
-    // Filter out non-drama results (e.g. type:"actor") that have no bookId
-    const filtered = Array.isArray(data)
-      ? data.filter((item: any) => item.bookId)
-      : data;
-
-    return encryptedResponse(filtered);
+    return encryptedResponse(fallbackResults);
   } catch (error) {
-    console.error("API Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("DramaBox search error:", error);
+    return NextResponse.json({ error: "Failed to search dramas" }, { status: 500 });
   }
 }
-

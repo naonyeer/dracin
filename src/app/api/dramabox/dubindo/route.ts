@@ -1,41 +1,16 @@
-import { safeJson, encryptedResponse } from "@/lib/api-utils";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { encryptedResponse } from "@/lib/api-utils";
+import { fetchCutad, pickSectionItems, flattenSections } from "@/lib/cutad";
+import { normalizeDramaBoxDrama } from "@/lib/cutad-normalizers";
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/dramabox";
-
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const classify = searchParams.get("classify") || "terbaru";
-  const page = searchParams.get("page") || "1";
-
+export async function GET() {
   try {
-    const response = await fetch(
-      `${UPSTREAM_API}/dubindo?classify=${classify}&page=${page}`,
-      { cache: 'no-store',}
-    );
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch data" },
-        { status: response.status }
-      );
-    }
-
-    const data = await safeJson(response);
-    
-    // Filter out items without bookId to prevent blank cards
-    // Note: data is directly an array for dubindo
-    const filteredData = Array.isArray(data) 
-      ? data.filter((item: any) => item && item.bookId) 
-      : [];
-
-    return encryptedResponse(filteredData);
+    const response = await fetchCutad<{ data?: { sections?: any[] } }>("dramabox", "rank", { page: 1 });
+    const sections = response.data?.sections || [];
+    const items = pickSectionItems(sections, 2).length > 0 ? pickSectionItems(sections, 2) : flattenSections(sections).slice(0, 24);
+    return encryptedResponse(items.map(normalizeDramaBoxDrama).filter((item) => item.bookId));
   } catch (error) {
-    console.error("API Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("DramaBox dubindo error:", error);
+    return NextResponse.json({ error: "Failed to fetch dubindo dramas" }, { status: 500 });
   }
 }
-
