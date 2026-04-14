@@ -81,32 +81,33 @@ export function InfiniteReelShortSection({ title }: InfiniteReelShortSectionProp
       </h2>
 
       <div className="media-grid">
-        {allDramas.map((drama, index) => {
-           // Normalize badge color: If text is "Terpopuler", force RED to match ReelShort/NetShort
-           const isPopular = drama.corner?.name?.toLowerCase().includes("populer");
-           const badgeColor = isPopular ? "#E52E2E" : (drama.corner?.color || "#e5a00d");
+      {allDramas.map((drama, index) => {
+      const cornerName = typeof drama.corner === "string" ? drama.corner : drama.corner?.name;
+      const cornerColor = typeof drama.corner === "string" ? undefined : drama.corner?.color;
+      const isPopular = cornerName?.toLowerCase().includes("populer") ?? false;
+            const badgeColor = isPopular ? "#E52E2E" : (cornerColor || "#e5a00d");
 
-           return (
-             <UnifiedMediaCard 
-               key={`${drama.bookId}-${index}`} 
-               index={index}
-               title={drama.bookName}
-               cover={drama.coverWap || drama.cover || ""}
-               link={`/detail/reelshort/${drama.bookId}`}
-               episodes={drama.chapterCount}
-               views={drama.playCount}
-               topLeftBadge={drama.corner ? {
-                 text: drama.corner.name,
-                 color: badgeColor
-               } : null}
-               topRightBadge={drama.rankVo ? {
-                 text: drama.rankVo.hotCode,
-                 isTransparent: true
-               } : null}
-             />
-           );
+      return (
+      <UnifiedMediaCard 
+      key={`${drama.bookId}-${index}`} 
+      index={index}
+      title={drama.bookName}
+      cover={drama.coverWap || drama.cover || ""}
+      link={`/detail/reelshort/${drama.bookId}`}
+      episodes={drama.chapterCount}
+      views={drama.playCount}
+      topLeftBadge={cornerName ? {
+      text: cornerName,
+        color: badgeColor
+      } : null}
+      topRightBadge={drama.rankVo ? {
+      text: drama.rankVo.hotCode,
+        isTransparent: true
+        } : null}
+        />
+         );
         })}
-      </div>
+       </div>
 
       {/* Loading Indicator & Trigger */}
       <div ref={loadMoreRef} className="py-8 flex justify-center w-full">

@@ -5,6 +5,8 @@ import { fetchCutad, flattenSections, paginateArray } from "@/lib/cutad";
 const PAGE_SIZE = 24;
 
 function mapToDrama(item: any) {
+  const cornerName = item?.type ? String(item.type) : "";
+
   return {
     bookId: String(item?.id || item?.filteredTitle || ""),
     bookName: String(item?.title || ""),
@@ -12,7 +14,14 @@ function mapToDrama(item: any) {
     cover: String(item?.cover || ""),
     chapterCount: Number(item?.episode || 0),
     introduction: String(item?.description || ""),
-    corner: item?.type ? String(item.type) : undefined,
+    corner: cornerName
+      ? {
+          cornerType: 0,
+          name: cornerName,
+          color: "#E52E2E",
+        }
+      : undefined,
+    inLibrary: false,
   };
 }
 
