@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-export type Platform = "dramabox" | "reelshort" | "shortmax" | "netshort" | "melolo" | "flickreels" | "freereels";
+export type Platform = "dramabox" | "reelshort" | "melolo" | "freereels";
 
 export interface PlatformInfo {
   id: Platform;
@@ -25,28 +25,10 @@ export const PLATFORMS: PlatformInfo[] = [
     apiBase: "/api/reelshort",
   },
   {
-    id: "shortmax",
-    name: "ShortMax",
-    logo: "/shortmax.webp",
-    apiBase: "/api/shortmax",
-  },
-  {
-    id: "netshort",
-    name: "NetShort",
-    logo: "/netshort.webp",
-    apiBase: "/api/netshort",
-  },
-  {
     id: "melolo",
     name: "Melolo",
     logo: "/melolo.webp",
     apiBase: "/api/melolo",
-  },
-  {
-    id: "flickreels",
-    name: "FlickReels",
-    logo: "/flickreels.png",
-    apiBase: "/api/flickreels",
   },
   {
     id: "freereels",
@@ -68,10 +50,10 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 export function usePlatform() {
   const { currentPlatform, setPlatform } = usePlatformStore();
-  const platformInfo = PLATFORMS.find((p) => p.id === currentPlatform)!;
+  const platformInfo = PLATFORMS.find((platform) => platform.id === currentPlatform) || PLATFORMS[0];
 
   const getPlatformInfo = (platformId: Platform) => {
-    return PLATFORMS.find((p) => p.id === platformId) || PLATFORMS[0];
+    return PLATFORMS.find((platform) => platform.id === platformId) || PLATFORMS[0];
   };
 
   return {
@@ -82,10 +64,7 @@ export function usePlatform() {
     getPlatformInfo,
     isDramaBox: currentPlatform === "dramabox",
     isReelShort: currentPlatform === "reelshort",
-    isShortMax: currentPlatform === "shortmax",
-    isNetShort: currentPlatform === "netshort",
     isMelolo: currentPlatform === "melolo",
-    isFlickReels: currentPlatform === "flickreels",
     isFreeReels: currentPlatform === "freereels",
   };
 }
