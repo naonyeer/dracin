@@ -80,7 +80,7 @@ export const PLATFORM_REGISTRY: PlatformInfo[] = [
   {
     id: "anime",
     name: "Anime",
-    logo: "/pusatdracin-tab.svg",
+    logo: "/anime-logo.svg",
     apiBase: "/api/anime",
     shell: "anime",
     availability: "active",
@@ -91,7 +91,7 @@ export const PLATFORM_REGISTRY: PlatformInfo[] = [
   {
     id: "donghua",
     name: "Donghua",
-    logo: "/pusatdracin-tab.svg",
+    logo: "/donghua-logo.svg",
     apiBase: "/api/donghua",
     shell: "anime",
     availability: "active",
@@ -102,7 +102,7 @@ export const PLATFORM_REGISTRY: PlatformInfo[] = [
   {
     id: "moviebox",
     name: "MovieBox",
-    logo: "/pusatdracin-tab.svg",
+    logo: "/moviebox-logo.svg",
     apiBase: "/api/moviebox",
     shell: "movie",
     availability: "active",
@@ -113,7 +113,7 @@ export const PLATFORM_REGISTRY: PlatformInfo[] = [
   {
     id: "film1",
     name: "Film1",
-    logo: "/pusatdracin-tab.svg",
+    logo: "/film1-logo.svg",
     apiBase: "/api/film1",
     shell: "movie",
     availability: "active",
@@ -124,7 +124,7 @@ export const PLATFORM_REGISTRY: PlatformInfo[] = [
   {
     id: "sfilmindo",
     name: "SFilmIndo",
-    logo: "/pusatdracin-tab.svg",
+    logo: "/sfilmindo-logo.svg",
     apiBase: "/api/sfilmindo",
     shell: "movie",
     availability: "active",
