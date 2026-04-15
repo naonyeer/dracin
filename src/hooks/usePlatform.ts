@@ -1,42 +1,16 @@
 "use client";
 
 import { create } from "zustand";
+import {
+  DEFAULT_PLATFORM,
+  PLATFORM_REGISTRY,
+  getPlatformInfo,
+  type Platform,
+  type PlatformInfo,
+} from "@/lib/provider-registry";
 
-export type Platform = "dramabox" | "reelshort" | "melolo" | "freereels";
-
-export interface PlatformInfo {
-  id: Platform;
-  name: string;
-  logo: string;
-  apiBase: string;
-}
-
-export const PLATFORMS: PlatformInfo[] = [
-  {
-    id: "dramabox",
-    name: "DramaBox",
-    logo: "/dramabox.webp",
-    apiBase: "/api/dramabox",
-  },
-  {
-    id: "reelshort",
-    name: "ReelShort",
-    logo: "/reelshort.webp",
-    apiBase: "/api/reelshort",
-  },
-  {
-    id: "melolo",
-    name: "Melolo",
-    logo: "/melolo.webp",
-    apiBase: "/api/melolo",
-  },
-  {
-    id: "freereels",
-    name: "FreeReels",
-    logo: "/freereels.webp",
-    apiBase: "/api/freereels",
-  },
-];
+export type { Platform, PlatformInfo } from "@/lib/provider-registry";
+export const PLATFORMS = PLATFORM_REGISTRY;
 
 interface PlatformState {
   currentPlatform: Platform;
@@ -44,17 +18,13 @@ interface PlatformState {
 }
 
 export const usePlatformStore = create<PlatformState>((set) => ({
-  currentPlatform: "dramabox",
+  currentPlatform: DEFAULT_PLATFORM,
   setPlatform: (platform) => set({ currentPlatform: platform }),
 }));
 
 export function usePlatform() {
   const { currentPlatform, setPlatform } = usePlatformStore();
-  const platformInfo = PLATFORMS.find((platform) => platform.id === currentPlatform) || PLATFORMS[0];
-
-  const getPlatformInfo = (platformId: Platform) => {
-    return PLATFORMS.find((platform) => platform.id === platformId) || PLATFORMS[0];
-  };
+  const platformInfo = getPlatformInfo(currentPlatform);
 
   return {
     currentPlatform,
