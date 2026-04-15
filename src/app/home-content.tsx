@@ -6,6 +6,8 @@ import { DramaSection } from "@/components/DramaSection";
 import { ReelShortSection } from "@/components/ReelShortSection";
 import { MeloloHome } from "@/components/MeloloHome";
 import { FreeReelsHome } from "@/components/FreeReelsHome";
+import { CutadCatalogHome } from "@/components/catalog/CutadCatalogHome";
+import { UnifiedErrorDisplay } from "@/components/UnifiedErrorDisplay";
 import { useLatestDramas, useTrendingDramas, useDubindoDramas } from "@/hooks/useDramas";
 import { usePlatform } from "@/hooks/usePlatform";
 import { InfiniteDramaSection } from "@/components/InfiniteDramaSection";
@@ -13,6 +15,9 @@ import { SpotlightHero } from "@/components/HomeHeroBanner";
 import { useReelShortHomepage } from "@/hooks/useReelShort";
 import { useMeloloLatest, useMeloloTrending } from "@/hooks/useMelolo";
 import { useFreeReelsHome } from "@/hooks/useFreeReels";
+import { useCutadCatalogHome } from "@/hooks/useCutadCatalog";
+import { getDetailHref, getWatchHref } from "@/lib/provider-routes";
+import type { PlatformInfo } from "@/lib/provider-registry";
 
 type HeroSpotlight = {
   id: string;
@@ -83,8 +88,21 @@ function selectSpotlight(items: HeroSpotlight[]): HeroSpotlight | null {
   return items[0];
 }
 
+function ProviderPreviewState({ platformInfo }: { platformInfo: PlatformInfo }) {
+  const statusLabel = platformInfo.availability === "unavailable" ? "Sedang offline" : "Segera hadir";
+
+  return (
+    <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+      <UnifiedErrorDisplay
+        title={`${platformInfo.name} ${statusLabel}`}
+        message={platformInfo.note || `${platformInfo.name} sedang disiapkan agar masuk ke gaya web yang sama dengan provider aktif lainnya.`}
+      />
+    </div>
+  );
+}
+
 export default function HomeContent() {
-  const { isDramaBox, isReelShort, isMelolo, isFreeReels, currentPlatform, platformInfo } = usePlatform();
+  const { currentPlatform, platformInfo } = usePlatform();
 
   const { data: latestDramas, isLoading: loadingLatest, error: errorLatest, refetch: refetchLatest } = useLatestDramas();
   const { data: trendingDramas, isLoading: loadingTrending, error: errorTrending, refetch: refetchTrending } = useTrendingDramas();
@@ -93,6 +111,11 @@ export default function HomeContent() {
   const { data: meloloTrending } = useMeloloTrending();
   const { data: meloloLatest } = useMeloloLatest();
   const { data: freeReelsHome } = useFreeReelsHome();
+  const { data: animeHome } = useCutadCatalogHome("anime");
+  const { data: donghuaHome } = useCutadCatalogHome("donghua");
+  const { data: movieboxHome } = useCutadCatalogHome("moviebox");
+  const { data: film1Home } = useCutadCatalogHome("film1");
+  const { data: sfilmindoHome } = useCutadCatalogHome("sfilmindo");
 
   const heroSpotlight = useMemo(() => {
     const dramaBoxCandidates = toUnique(
@@ -104,8 +127,8 @@ export default function HomeContent() {
         poster: movie.coverWap || movie.cover || "",
         episodes: movie.chapterCount,
         viewsValue: parseViewCount(movie.playCount),
-        detailHref: `/detail/dramabox/${movie.bookId}`,
-        watchHref: `/watch/dramabox/${movie.bookId}`,
+        detailHref: getDetailHref("dramabox", movie.bookId),
+        watchHref: getWatchHref("dramabox", { id: movie.bookId }),
         isFeatured: Boolean(movie.corner || movie.rankVo),
       }))
     );
@@ -120,8 +143,8 @@ export default function HomeContent() {
         poster: movie.book_pic || "",
         episodes: movie.chapter_count,
         viewsValue: parseViewCount(movie.read_count || movie.collect_count),
-        detailHref: `/detail/reelshort/${movie.book_id}`,
-        watchHref: `/watch/reelshort/${movie.book_id}`,
+        detailHref: getDetailHref("reelshort", movie.book_id),
+        watchHref: getWatchHref("reelshort", { id: movie.book_id }),
         isFeatured: movie.book_mark?.text?.toLowerCase().includes("featured") || false,
       }))
     );
@@ -145,8 +168,8 @@ export default function HomeContent() {
         poster: movie.poster || movie.backdrop || movie.thumb_url || "",
         episodes: movie.serial_count,
         viewsValue: parseViewCount(movie.popularity),
-        detailHref: `/detail/melolo/${movie.book_id}`,
-        watchHref: `/detail/melolo/${movie.book_id}`,
+        detailHref: getDetailHref("melolo", movie.book_id),
+        watchHref: getWatchHref("melolo", { id: movie.book_id }),
         isFeatured: false,
       }))
     );
@@ -173,23 +196,139 @@ export default function HomeContent() {
         poster: movie.cover || "",
         episodes: movie.episode_count,
         viewsValue: parseViewCount(movie.follow_count),
-        detailHref: `/detail/freereels/${movie.key}`,
-        watchHref: `/watch/freereels/${movie.key}`,
+        detailHref: getDetailHref("freereels", movie.key),
+        watchHref: getWatchHref("freereels", { id: movie.key }),
         isFeatured: (Array.isArray(movie.content_tags) ? movie.content_tags : []).some((tag: string) => tag.toLowerCase().includes("featured")),
       }))
     );
 
-    const activeCandidates =
-      currentPlatform === "dramabox"
-        ? dramaBoxCandidates
-        : currentPlatform === "reelshort"
-          ? reelShortCandidates
-          : currentPlatform === "melolo"
-            ? meloloCandidates
-            : freeReelsCandidates;
+    const animeItems = animeHome?.data?.items?.flatMap((module) => {
+      if (module.type === "recommend" && module.items?.[0]?.module_card?.items) {
+        return module.items[0].module_card.items;
+      }
+      return module.items || [];
+    }) || [];
 
+    const animeCandidates = toUnique(
+      animeItems.map((movie) => ({
+        id: `anime-${movie.key}`,
+        title: movie.title,
+        description: normalizeDescription(movie.desc, movie.episode_count),
+        backdrop: movie.cover || "",
+        poster: movie.cover || "",
+        episodes: movie.episode_count,
+        viewsValue: 0,
+        detailHref: getDetailHref("anime", movie.key),
+        watchHref: `${getWatchHref("anime", { id: movie.key })}?ep=1`,
+        isFeatured: false,
+      }))
+    );
+
+    const donghuaItems = donghuaHome?.data?.items?.flatMap((module) => {
+      if (module.type === "recommend" && module.items?.[0]?.module_card?.items) {
+        return module.items[0].module_card.items;
+      }
+      return module.items || [];
+    }) || [];
+
+    const donghuaCandidates = toUnique(
+      donghuaItems.map((movie) => ({
+        id: `donghua-${movie.key}`,
+        title: movie.title,
+        description: normalizeDescription(movie.desc, movie.episode_count),
+        backdrop: movie.cover || "",
+        poster: movie.cover || "",
+        episodes: movie.episode_count,
+        viewsValue: 0,
+        detailHref: getDetailHref("donghua", movie.key),
+        watchHref: `${getWatchHref("donghua", { id: movie.key })}?ep=1`,
+        isFeatured: false,
+      }))
+    );
+
+    const movieboxItems = movieboxHome?.data?.items?.flatMap((module) => {
+      if (module.type === "recommend" && module.items?.[0]?.module_card?.items) {
+        return module.items[0].module_card.items;
+      }
+      return module.items || [];
+    }) || [];
+
+    const movieboxCandidates = toUnique(
+      movieboxItems.map((movie) => ({
+        id: `moviebox-${movie.key}`,
+        title: movie.title,
+        description: normalizeDescription(movie.desc, movie.episode_count),
+        backdrop: movie.cover || "",
+        poster: movie.cover || "",
+        episodes: movie.episode_count,
+        viewsValue: 0,
+        detailHref: getDetailHref("moviebox", movie.key),
+        watchHref: getWatchHref("moviebox", { id: movie.key }),
+        isFeatured: (movie.metadata || []).some((meta: string) => meta.toLowerCase().includes("movie")),
+      }))
+    );
+
+    const film1Items = film1Home?.data?.items?.flatMap((module) => {
+      if (module.type === "recommend" && module.items?.[0]?.module_card?.items) {
+        return module.items[0].module_card.items;
+      }
+      return module.items || [];
+    }) || [];
+
+    const film1Candidates = toUnique(
+      film1Items.map((movie) => ({
+        id: `film1-${movie.key}`,
+        title: movie.title,
+        description: normalizeDescription(movie.desc, movie.episode_count),
+        backdrop: movie.cover || "",
+        poster: movie.cover || "",
+        episodes: movie.episode_count,
+        viewsValue: 0,
+        detailHref: getDetailHref("film1", movie.key),
+        watchHref: getWatchHref("film1", { id: movie.key }),
+        isFeatured: false,
+      }))
+    );
+
+    const sfilmindoItems = sfilmindoHome?.data?.items?.flatMap((module) => {
+      if (module.type === "recommend" && module.items?.[0]?.module_card?.items) {
+        return module.items[0].module_card.items;
+      }
+      return module.items || [];
+    }) || [];
+
+    const sfilmindoCandidates = toUnique(
+      sfilmindoItems.map((movie) => ({
+        id: `sfilmindo-${movie.key}`,
+        title: movie.title,
+        description: normalizeDescription(movie.desc, movie.episode_count),
+        backdrop: movie.cover || "",
+        poster: movie.cover || "",
+        episodes: movie.episode_count,
+        viewsValue: 0,
+        detailHref: getDetailHref("sfilmindo", movie.key),
+        watchHref: getWatchHref("sfilmindo", { id: movie.key }),
+        isFeatured: false,
+      }))
+    );
+
+    const candidateMap = {
+      dramabox: dramaBoxCandidates,
+      reelshort: reelShortCandidates,
+      melolo: meloloCandidates,
+      freereels: freeReelsCandidates,
+      anime: animeCandidates,
+      donghua: donghuaCandidates,
+      moviebox: movieboxCandidates,
+      film1: film1Candidates,
+      sfilmindo: sfilmindoCandidates,
+    };
+
+    const activeCandidates = candidateMap[currentPlatform as keyof typeof candidateMap] || [];
     return selectSpotlight(activeCandidates);
-  }, [currentPlatform, trendingDramas, latestDramas, dubindoDramas, reelShortHome, meloloTrending, meloloLatest, freeReelsHome]);
+  }, [currentPlatform, trendingDramas, latestDramas, dubindoDramas, reelShortHome, meloloTrending, meloloLatest, freeReelsHome, animeHome, donghuaHome, movieboxHome, film1Home, sfilmindoHome]);
+
+  const supportsHero = platformInfo.homeEnabled && platformInfo.availability === "active";
 
   return (
     <main className="min-h-screen pt-16">
@@ -206,8 +345,20 @@ export default function HomeContent() {
             watchHref={heroSpotlight.watchHref}
             detailHref={heroSpotlight.detailHref}
           />
-        ) : (
+        ) : supportsHero ? (
           <section className="h-[320px] animate-pulse rounded-[28px] border border-white/10 bg-white/[0.04]" />
+        ) : (
+          <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(135deg,rgba(17,22,35,0.92)_0%,rgba(9,13,24,0.98)_100%)] p-8 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
+            <div className="max-w-3xl space-y-4">
+              <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                {platformInfo.availability === "unavailable" ? "Offline" : "Preparing"}
+              </span>
+              <div>
+                <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">{platformInfo.name}</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">{platformInfo.note}</p>
+              </div>
+            </div>
+          </section>
         )}
 
         <section className="relative z-[90] rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(17,22,35,0.78)_0%,rgba(9,13,24,0.88)_100%)] backdrop-blur-xl">
@@ -215,7 +366,7 @@ export default function HomeContent() {
         </section>
       </div>
 
-      {isDramaBox && (
+      {currentPlatform === "dramabox" && (
         <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
           <DramaSection
             title="Sedang Trending"
@@ -246,23 +397,55 @@ export default function HomeContent() {
         </div>
       )}
 
-      {isReelShort && (
+      {currentPlatform === "reelshort" && (
         <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
           <ReelShortSection />
         </div>
       )}
 
-      {isMelolo && (
+      {currentPlatform === "melolo" && (
         <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
           <MeloloHome />
         </div>
       )}
 
-      {isFreeReels && (
+      {currentPlatform === "freereels" && (
         <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
           <FreeReelsHome />
         </div>
       )}
+
+      {currentPlatform === "anime" && (
+        <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+          <CutadCatalogHome provider="anime" title="Anime" />
+        </div>
+      )}
+
+      {currentPlatform === "donghua" && (
+        <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+          <CutadCatalogHome provider="donghua" title="Donghua" />
+        </div>
+      )}
+
+      {currentPlatform === "moviebox" && (
+        <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+          <CutadCatalogHome provider="moviebox" title="MovieBox" />
+        </div>
+      )}
+
+      {currentPlatform === "film1" && (
+        <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+          <CutadCatalogHome provider="film1" title="Film1" />
+        </div>
+      )}
+
+      {currentPlatform === "sfilmindo" && (
+        <div id="content-start" className="container mx-auto space-y-10 px-4 py-8 md:space-y-12 md:px-10 md:py-10 lg:px-12">
+          <CutadCatalogHome provider="sfilmindo" title="SFilmIndo" />
+        </div>
+      )}
+
+      {!platformInfo.homeEnabled && <ProviderPreviewState platformInfo={platformInfo} />}
     </main>
   );
 }
