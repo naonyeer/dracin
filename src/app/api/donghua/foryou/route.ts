@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetchCutad<{ data?: { sections?: any[] } }>("donghua", "rank", { page: 1 });
-    return encryptedResponse(buildCatalogForYou(response.data?.sections, offset, 20));
+    return encryptedResponse(buildCatalogForYou(response.data, offset, 20));
   } catch (error) {
     console.error("Donghua foryou error:", error);
     return createCutadErrorResponse(error, "Failed to fetch donghua list");

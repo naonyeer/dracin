@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetchCutad<{ data?: { sections?: any[] } }>("moviebox", "rank", { page: 1 });
-    return encryptedResponse(buildCatalogForYou(response.data?.sections, offset));
+    return encryptedResponse(buildCatalogForYou(response.data, offset));
   } catch (error) {
     console.error("MovieBox foryou error:", error);
     return createCutadErrorResponse(error, "Failed to fetch MovieBox catalog");

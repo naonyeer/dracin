@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   try {
     try {
       const response = await fetchCutad<{ data?: { sections?: any[] } }>("anime", "search", { query });
-      const payload = buildCatalogSearch(response.data?.sections);
+      const payload = buildCatalogSearch(response.data);
       if ((payload.data.items || []).length > 0) {
         return encryptedResponse(payload);
       }
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     }
 
     const fallback = await fetchCutad<{ data?: { sections?: any[] } }>("anime", "rank", { page: 1 });
-    const payload = buildCatalogSearch(fallback.data?.sections);
+    const payload = buildCatalogSearch(fallback.data);
     payload.data.items = payload.data.items.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
     return encryptedResponse(payload);
   } catch (error) {

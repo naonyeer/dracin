@@ -30,15 +30,50 @@ function toStringArray(value: unknown): string[] {
   return [];
 }
 
+function extractRawCatalogItems(source: unknown): any[] {
+  if (!source) return [];
+
+  if (Array.isArray(source)) {
+    const sectionLike = source.filter((item) => item && typeof item === "object" && Array.isArray((item as any).items));
+    if (sectionLike.length > 0 && sectionLike.length === source.length) {
+      return flattenSections(sectionLike as CutadSection<any>[]);
+    }
+
+    return source.flatMap((item) => {
+      if (Array.isArray(item?.rank_list)) return item.rank_list;
+      if (Array.isArray(item?.list)) return item.list;
+      return item ? [item] : [];
+    });
+  }
+
+  if (typeof source === "object") {
+    const data = source as { sections?: unknown; list?: unknown; items?: unknown };
+
+    if (Array.isArray(data.sections)) {
+      return extractRawCatalogItems(data.sections);
+    }
+
+    if (Array.isArray(data.list)) {
+      return extractRawCatalogItems(data.list);
+    }
+
+    if (Array.isArray(data.items)) {
+      return extractRawCatalogItems(data.items);
+    }
+  }
+
+  return [];
+}
+
 export function normalizeCatalogItem(item: any) {
   return {
-    key: toText(item?.id || item?.fakeId || item?.href),
-    title: toText(item?.title || item?.name),
-    cover: toText(item?.cover || item?.poster || item?.coverImgUrl),
-    desc: toText(item?.desc || item?.description || item?.introduce),
-    episode_count: toNumber(item?.episode || item?.totalEpisodes || item?.totalOfEpisodes),
-    follow_count: 0,
-    content_tags: toStringArray(item?.tags || item?.genre || item?.category),
+    key: toText(item?.id || item?.book_id || item?.playlet_id || item?.key || item?.fakeId || item?.href),
+    title: toText(item?.title || item?.book_title || item?.bookName || item?.name),
+    cover: toText(item?.cover || item?.book_pic || item?.thumb_url || item?.poster || item?.coverImgUrl),
+    desc: toText(item?.desc || item?.special_desc || item?.abstract || item?.description || item?.introduce || item?.introduction),
+    episode_count: toNumber(item?.episode_count || item?.chapter_count || item?.serial_count || item?.episode || item?.totalEpisodes || item?.totalOfEpisodes),
+    follow_count: toNumber(item?.follow_count || item?.hot_num || item?.read_count || item?.collect_count),
+    content_tags: toStringArray(item?.content_tags || item?.tags || item?.genre || item?.category || item?.theme),
     metadata: [toText(item?.type), toText(item?.rating), toText(item?.year)].filter(Boolean),
     type: toText(item?.type),
     rating: toText(item?.rating),
@@ -67,8 +102,8 @@ export function buildCatalogModules(items: ReturnType<typeof normalizeCatalogIte
   ];
 }
 
-export function buildCatalogPage(sections: CutadSection<any>[] | undefined, moduleName: string) {
-  const items = flattenSections(sections).map(normalizeCatalogItem).filter((item) => item.key && item.title && item.cover);
+export function buildCatalogPage(source: unknown, moduleName: string) {
+  const items = extractRawCatalogItems(source).map(normalizeCatalogItem).filter((item) => item.key && item.title && item.cover);
 
   return {
     code: 0,
@@ -79,8 +114,8 @@ export function buildCatalogPage(sections: CutadSection<any>[] | undefined, modu
   };
 }
 
-export function buildCatalogForYou(sections: CutadSection<any>[] | undefined, offset = 0, pageSize = 20) {
-  const items = flattenSections(sections).map(normalizeCatalogItem).filter((item) => item.key && item.title && item.cover);
+export function buildCatalogForYou(source: unknown, offset = 0, pageSize = 20) {
+  const items = extractRawCatalogItems(source).map(normalizeCatalogItem).filter((item) => item.key && item.title && item.cover);
   const sliced = items.slice(offset, offset + pageSize);
 
   return {
@@ -96,8 +131,8 @@ export function buildCatalogForYou(sections: CutadSection<any>[] | undefined, of
   };
 }
 
-export function buildCatalogSearch(sections: CutadSection<any>[] | undefined) {
-  const items = flattenSections(sections)
+export function buildCatalogSearch(source: unknown) {
+  const items = extractRawCatalogItems(source)
     .map(normalizeCatalogItem)
     .filter((item) => item.key && item.title && item.cover)
     .map((item) => ({

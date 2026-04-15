@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   try {
     try {
       const searchResponse = await fetchCutad<{ data?: { sections?: any[] } }>("film1", "search", { query });
-      const built = buildCatalogSearch(searchResponse.data?.sections);
+      const built = buildCatalogSearch(searchResponse.data);
       if (built.data.items.length > 0) {
         return encryptedResponse(built);
       }

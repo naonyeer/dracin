@@ -5,7 +5,7 @@ import { buildCatalogPage } from "@/lib/cutad-catalog";
 export async function GET() {
   try {
     const response = await fetchCutad<{ data?: { sections?: any[] } }>("donghua", "rank", { page: 1 });
-    return encryptedResponse(buildCatalogPage(response.data?.sections, "Pilihan Donghua"));
+    return encryptedResponse(buildCatalogPage(response.data, "Pilihan Donghua"));
   } catch (error) {
     console.error("Donghua home error:", error);
     return createCutadErrorResponse(error, "Failed to fetch donghua home");
