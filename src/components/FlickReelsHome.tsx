@@ -52,6 +52,23 @@ export function FlickReelsHome() {
     );
   }
 
+  const hotRankItems = (hotRankData?.data || []).flatMap((section) => section.data || []).filter((item) => item.title && item.cover);
+  const latestItems = (latestData?.data || []).flatMap((section) => section.list || []).filter((item) => item.title && item.cover);
+  const hasRenderableItems = hotRankItems.length > 0 || latestItems.length > 0;
+
+  if (!loadingLatest && !loadingHotRank && !hasRenderableItems) {
+    return (
+      <UnifiedErrorDisplay
+        title="FlickReels Sedang Offline"
+        message="Sumber FlickReels sedang tidak tersedia untuk sementara waktu. Silakan coba platform lain dulu."
+        onRetry={() => {
+          refetchLatest();
+          refetchHotRank();
+        }}
+      />
+    );
+  }
+
   return (
     <div className="space-y-12 pb-20">
       

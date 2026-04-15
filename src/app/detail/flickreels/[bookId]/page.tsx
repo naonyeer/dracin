@@ -6,7 +6,7 @@ import { Play, ChevronLeft, Info } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UnifiedErrorDisplay } from "@/components/UnifiedErrorDisplay";
-import { Badge } from "@/components/ui/badge";
+import { getPlatformInfo } from "@/lib/provider-registry";
 
 export default function FlickReelsDetailPage() {
   const params = useParams();
@@ -19,13 +19,15 @@ export default function FlickReelsDetailPage() {
     return <DetailSkeleton />;
   }
 
-  if (error || !data) {
+  const flickInfo = getPlatformInfo("flickreels");
+
+  if (error || !data || !Array.isArray(data.episodes) || data.episodes.length === 0) {
     return (
-      <div className="min-h-screen pt-24 px-4">
-        <UnifiedErrorDisplay 
-          title="Gagal Memuat Drama"
-          message={error ? "Drama tidak ditemukan atau terjadi kesalahan server." : "Data tidak tersedia."}
-          onRetry={() => refetch()} 
+      <div className="min-h-screen px-4 pt-24">
+        <UnifiedErrorDisplay
+          title="FlickReels Sedang Offline"
+          message={flickInfo.note || "Sumber FlickReels sedang tidak tersedia untuk sementara waktu."}
+          onRetry={() => refetch()}
         />
       </div>
     );

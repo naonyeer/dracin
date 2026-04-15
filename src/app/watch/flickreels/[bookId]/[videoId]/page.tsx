@@ -6,6 +6,8 @@ import { useFlickReelsDetail } from "@/hooks/useFlickReels";
 import { ChevronLeft, ChevronRight, Loader2, List, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { getPlatformInfo } from "@/lib/provider-registry";
+import { UnifiedErrorDisplay } from "@/components/UnifiedErrorDisplay";
 
 export default function FlickReelsWatchPage() {
   const params = useParams();
@@ -150,14 +152,16 @@ export default function FlickReelsWatchPage() {
     );
   }
 
-  if (error || !data) {
+  const flickInfo = getPlatformInfo("flickreels");
+
+  if (error || !data || !Array.isArray(data.episodes) || data.episodes.length === 0) {
     return (
-      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-4">
-        <AlertCircle className="w-12 h-12 text-destructive mb-4" />
-        <h2 className="text-2xl font-bold text-white mb-4">Drama tidak ditemukan</h2>
-        <Link href="/" className="text-primary hover:underline">
-          Kembali ke beranda
-        </Link>
+      <div className="min-h-screen bg-background px-4 pt-24">
+        <UnifiedErrorDisplay
+          title="FlickReels Sedang Offline"
+          message={flickInfo.note || "Sumber FlickReels sedang tidak tersedia untuk sementara waktu."}
+          onRetry={() => refetch()}
+        />
       </div>
     );
   }
